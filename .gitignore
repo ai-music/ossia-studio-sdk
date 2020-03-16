@@ -1,0 +1,19 @@
+node_modules
+local.ts
+local.sh
+.idea
+architecture/development/volumes/*
+!architecture/development/volumes/.gitkeep
+*.env
+*.mp3
+*.wav
+yarn-error.log
+dist
+.terraform
+*.plan
+*.tfstate
+*.tfstate.backup
+.DS_Store
+# Http client payloads
+**/http/*.json
+rest-client.env.json
