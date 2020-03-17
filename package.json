@@ -8,14 +8,14 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
-    "eslint": "^6.8.0"
-  },
-  "dependencies": {
+    "eslint": "^6.8.0",
     "husky": "^4.2.3",
+    "minimist": "^1.2.5",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "typescript": "^3.8.3"
   },
+  "dependencies": {},
   "husky": {
     "hooks": {
       "pre-commit": "./pre_commit.sh"
