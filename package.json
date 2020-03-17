@@ -2,7 +2,7 @@
   "name": "ossia-studio-sdk",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "AIMusic",
+  "author": "AIMUSIC",
   "license": "MIT",
   "private": false,
   "devDependencies": {
