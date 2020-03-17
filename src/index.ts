@@ -1,2 +1,3 @@
-const test = 'test'
-console.log('test >>> ', test)
+export function sum(a: number, b: number): number {
+  return a + b
+}
