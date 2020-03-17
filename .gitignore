@@ -17,3 +17,4 @@ dist
 # Http client payloads
 **/http/*.json
 rest-client.env.json
+coverage
