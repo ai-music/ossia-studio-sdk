@@ -20,9 +20,12 @@
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "ts-jest": "^25.2.1",
+    "ts-node": "^8.8.1",
     "typescript": "^3.8.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.19.2"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "./pre_commit.sh"
