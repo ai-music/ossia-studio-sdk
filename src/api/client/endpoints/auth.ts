@@ -2,6 +2,8 @@ import { ENDPOINT, IApiResponse, IAuthEndpoint, IAuthResponse, IHttpClient } fro
 
 export class AuthEndpoint implements IAuthEndpoint {
   public path = `${ENDPOINT.AUTH}`
+  protected applicationId: string
+  protected applicationToken: string
   constructor(protected readonly client: IHttpClient) {}
 
   /**
@@ -9,7 +11,6 @@ export class AuthEndpoint implements IAuthEndpoint {
    * @param payload
    */
   public async create<IAuthCredentials>(payload: Partial<IAuthCredentials>): Promise<IApiResponse<IAuthResponse>> {
-    // TODO add validation from credentials
     return this.client.post<IAuthResponse>(this.path, payload)
   }
 }

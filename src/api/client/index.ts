@@ -8,6 +8,7 @@ export class ApiClient {
   protected credentials: Partial<IAuthCredentials>
   protected client = new HttpClient()
   public auth: AuthEndpoint = new AuthEndpoint(this.client)
+  public application: ApplicationEndpoint = new ApplicationEndpoint(this.client)
 
   protected constructor(credentials: Partial<IAuthCredentials>, public readonly host: string, public type: CLIENT_TYPE) {
     this.credentials = credentials
@@ -29,7 +30,7 @@ export class ApiClient {
    * @param password
    * @param host
    */
-  static getUserClient(email: string, password: string, host = HOST.API): ApiClient {
+  static getUserClient(email: string, password: string, host = process.env.HOST_API || HOST.API): ApiClient {
     return new ApiClient({ email, password }, host, CLIENT_TYPE.USER)
   }
 
@@ -39,7 +40,7 @@ export class ApiClient {
    * @param apiSecret
    * @param host
    */
-  static getApplicationClient(apiKey: string, apiSecret: string, host = HOST.API): ApiClient {
+  static getApplicationClient(apiKey: string, apiSecret: string, host = process.env.HOST_API || HOST.API): ApiClient {
     return new ApiClient({ apiKey, apiSecret }, host, CLIENT_TYPE.APP)
   }
 

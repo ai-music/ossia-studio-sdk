@@ -1,6 +1,12 @@
 export enum HOST {
-  // TODO @Team remember to change this to your localhost for testing
   API = 'https://ossia-studio-api.aimusic.services',
+}
+
+export enum HTTP_METHOD {
+  POST = 'post',
+  GET = 'get',
+  PUT = 'put',
+  DELETE = 'delete',
 }
 
 export enum ENDPOINT {
@@ -29,16 +35,24 @@ export interface IAuthCredentials {
   jwt: string
 }
 
-export interface IEndpoint {
-  path: string
+export interface IPaginator {
+  from: number
+  size: number
+  total?: number
+}
+
+export interface IQueryParameters {
+  paginator?: IPaginator
 }
 
 export interface IAuthEndpoint {
-  create<T>(credentials: Partial<T>): Promise<IApiResponse<IAuthResponse>>
+  create<T>(payload: Partial<T>): Promise<IApiResponse<IAuthResponse>>
 }
 
 export interface IHttpClient {
   post<T>(path: string, payload: Partial<T>): Promise<IApiResponse<T>>
+  get<T>(path: string, payload?: any): Promise<IApiResponse<T>>
+  put<T>(path: string, payload: Partial<T>): Promise<IApiResponse<T>>
 }
 
 export interface IApiResponse<T> {

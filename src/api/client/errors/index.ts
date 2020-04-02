@@ -10,16 +10,16 @@ export class ApiError extends Error {
   public readonly method: string
 
   public static invalidInput(message: string, endpoint: string, method: string, statusCode?: number): ApiError {
-    return new ApiError(ERROR_MESSAGE.INVALID_INPUT(message), endpoint, method, statusCode)
+    return new ApiError(ERROR_MESSAGE.INVALID_INPUT(message), endpoint, method, statusCode || null)
   }
 
   public static invalidResponse(message: string, endpoint: string, method: string, statusCode?: number): ApiError {
-    return new ApiError(ERROR_MESSAGE.INVALID_RESPONSE(message), endpoint, method, statusCode)
+    return new ApiError(ERROR_MESSAGE.INVALID_RESPONSE(message), endpoint, method, statusCode || null)
   }
 
   constructor(message: string, endpoint: string, method: string, statusCode?: number) {
     super(message)
-    this.statusCode = statusCode
+    this.statusCode = statusCode || null
     this.endpoint = endpoint
     this.method = method
     Object.setPrototypeOf(this, ApiError.prototype)
