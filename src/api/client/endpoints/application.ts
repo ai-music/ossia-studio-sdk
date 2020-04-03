@@ -1,4 +1,4 @@
-import { ENDPOINT, IApiResponse, IApplication, IHttpClient, IQueryParameters } from '../../../types'
+import { ENDPOINT, IApplication, IApplicationCreate, IHttpClient, IQueryParameters, ApiResponse } from '../../../types'
 import { stringifyQueryObject } from '../../../utils'
 
 export class ApplicationEndpoint {
@@ -9,15 +9,17 @@ export class ApplicationEndpoint {
    * This method will allow you to create an application
    * @param payload
    */
-  public async create<IApplication>(payload: Partial<IApplication>): Promise<IApiResponse<IApplication>> {
-    return this.client.post<IApplication>(this.path, payload)
+  public create(payload: IApplicationCreate): ApiResponse<IApplication> {
+    return this.client.post<IApplicationCreate, IApplication>(this.path, payload)
   }
 
   /**
    * This method will return the application model
+   * If the applicationId is set, it will return the model if the token has the right permission
+   * If the applicationId is not set, it will return the model based on the ownerId
    * @param applicationId
    */
-  public async get(applicationId?: string): Promise<IApiResponse<IApplication>> {
+  public get(applicationId?: string): ApiResponse<IApplication> {
     if (applicationId) {
       return this.client.get<IApplication>(`${this.path}/${applicationId}`)
     }
@@ -30,7 +32,7 @@ export class ApplicationEndpoint {
    * @param parameters
    * example { paginator: { from: 0, size: 3 } }
    */
-  public async list(parameters?: IQueryParameters): Promise<IApiResponse<IApplication[]>> {
+  public list(parameters?: IQueryParameters): ApiResponse<IApplication[]> {
     if (parameters) {
       const queryParameters = stringifyQueryObject(parameters)
       return this.client.get<IApplication[]>(`${this.path}?${queryParameters}`)
@@ -43,7 +45,7 @@ export class ApplicationEndpoint {
    * Please bear in mind that this method requires specific permission in order to update the model
    * @param payload
    */
-  public async update(payload: Partial<IApplication>): Promise<IApiResponse<IApplication>> {
+  public update(payload: IApplication): ApiResponse<IApplication> {
     return this.client.put<IApplication>(`${this.path}/${payload.id}`, payload)
   }
 }
