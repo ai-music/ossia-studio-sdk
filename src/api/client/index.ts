@@ -1,16 +1,20 @@
-import { CLIENT_TYPE, HOST, IApiResponse, IApplication, IAuthCredentials } from '../../types'
+import dotenv from 'dotenv'
+dotenv.config()
+import { ApiResponse, CLIENT_TYPE, HOST, IApplication, IApplicationCreate, ICredentials } from '../../types'
 import { AuthEndpoint } from './endpoints/auth'
 import { ApplicationEndpoint } from './endpoints/application'
 import { HttpClient } from '../../lib/http_client'
+import { BusinessEndpoint } from './endpoints/business'
 
 export class ApiClient {
   protected jwt: string
-  protected credentials: Partial<IAuthCredentials>
+  protected credentials: Partial<ICredentials>
   protected client = new HttpClient()
   public auth: AuthEndpoint = new AuthEndpoint(this.client)
   public application: ApplicationEndpoint = new ApplicationEndpoint(this.client)
+  public business: BusinessEndpoint = new BusinessEndpoint(this.client)
 
-  protected constructor(credentials: Partial<IAuthCredentials>, public readonly host: string, public type: CLIENT_TYPE) {
+  protected constructor(credentials: Partial<ICredentials>, public readonly host: string, public type: CLIENT_TYPE) {
     this.credentials = credentials
   }
 
@@ -19,9 +23,9 @@ export class ApiClient {
    * Bare in mind that every application needs to be validated before it can be used.
    * @param payload
    */
-  static async createApp(payload: Partial<IApplication>): Promise<IApiResponse<Partial<IApplication>>> {
+  static createApp(payload: IApplicationCreate): ApiResponse<Partial<IApplication>> {
     const application: ApplicationEndpoint = new ApplicationEndpoint(new HttpClient())
-    return await application.create(payload)
+    return application.create(payload)
   }
 
   /**
@@ -48,8 +52,8 @@ export class ApiClient {
    * This method will authenticate the client(user or application) and store the JTW token
    */
   public async authenticate(): Promise<void> {
-    const { email, password, apiKey, apiSecret, jwt } = this.credentials
-    let response = { data: { token: jwt } }
+    const { email, password, apiKey, apiSecret } = this.credentials
+    let response = { data: { token: this.jwt } }
     if (apiKey && apiSecret) {
       response = await this.auth.create({ apiKey, apiSecret })
     }

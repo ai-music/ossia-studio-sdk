@@ -1,22 +1,22 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { HOST, HTTP_METHOD, IApiResponse, IHttpClient } from '../types'
+import { ApiResponse, HOST, HTTP_METHOD, IHttpClient } from '../types'
 import { ApiError } from '../api/client/errors'
 
 export class HttpClient implements IHttpClient {
-  protected api: string = process.env.API_HOST || HOST.API
+  protected api: string = process.env.HOST_API || HOST.API
   constructor(protected jwt?: string | null) {}
 
   public setJWT(token: string): void {
     this.jwt = token
   }
 
-  public post<T>(endpoint: string, payload: Partial<T>): Promise<IApiResponse<T>> {
+  public post<T>(endpoint: string, payload: Partial<T>): ApiResponse<T> {
     return Axios.post(`${this.api}/${endpoint}`, payload, this.getRequestConfig())
       .then(({ data, ...request }) => ({ ...data, status: request.status }))
       .catch(error => this.errorParser(error, endpoint, HTTP_METHOD.POST))
   }
 
-  public get<T>(endpoint: string, parameters?: any): Promise<IApiResponse<T>> {
+  public get<T>(endpoint: string, parameters?: any): ApiResponse<T> {
     return Axios.get(`${this.api}/${endpoint}`, {
       params: parameters || null,
       ...this.getRequestConfig(),
@@ -25,7 +25,7 @@ export class HttpClient implements IHttpClient {
       .catch(error => this.errorParser(error, endpoint, HTTP_METHOD.GET))
   }
 
-  public put<T>(endpoint: string, payload: Partial<T>): Promise<IApiResponse<T>> {
+  public put<T>(endpoint: string, payload: T): ApiResponse<T> {
     return Axios.put(`${this.api}/${endpoint}`, payload, this.getRequestConfig())
       .then(({ data, ...request }) => ({ ...data, status: request.status }))
       .catch(error => this.errorParser(error, endpoint, HTTP_METHOD.PUT))
