@@ -368,3 +368,33 @@ export enum CURRENCIES {
   GBP = 'GBP',
   EUR = 'EUR',
 }
+
+export enum STATE {
+  PENDING = 'PENDING',
+  ERROR = 'ERROR',
+  UPLOADED = 'UPLOADED',
+  DELETED = 'DELETED',
+  READY = 'READY',
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED',
+  DISABLED = 'DISABLED',
+  PROCESSING = 'PROCESSING',
+}
+
+export interface ICampaignCreate {
+  title: string
+}
+export interface ICampaign extends IEntity {
+  title: string
+  state: STATE.DELETED | STATE.READY
+  vocalTracks: string[]
+  remixTracks: string[]
+  ownerType: string
+  ownerId: string
+  master: {
+    storage: string | null
+    storageKey: string | null
+    state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.PROCESSING
+    error?: string
+  }
+}
