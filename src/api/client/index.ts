@@ -3,6 +3,7 @@ import { ApiResponse, CLIENT_TYPE, HOST, IApplication, IApplicationCreate, ICred
 import { AuthEndpoint, ApplicationEndpoint, BusinessEndpoint, CampaignEndpoint } from './endpoints'
 import { HttpClient } from '../../lib/http_client'
 import { Socket } from './sockets'
+import { BackingTrackEndpoint } from './endpoints/backing_track'
 import jwt from 'jsonwebtoken'
 
 env.config()
@@ -13,6 +14,7 @@ export class ApiClient {
   public socketClient: Socket
   public auth: AuthEndpoint
   public application: ApplicationEndpoint
+  public backingtrack: BackingTrackEndpoint
   public business: BusinessEndpoint
   public campaign: CampaignEndpoint
 
@@ -24,6 +26,7 @@ export class ApiClient {
     this.client = new HttpClient()
     this.auth = new AuthEndpoint(this.client)
     this.application = new ApplicationEndpoint(this.client)
+    this.backingtrack = new BackingTrackEndpoint(this.client)
     this.business = new BusinessEndpoint(this.client)
     this.campaign = new CampaignEndpoint(this.client)
   }
