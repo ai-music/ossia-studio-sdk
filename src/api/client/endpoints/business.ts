@@ -2,7 +2,7 @@ import { ApiResponse, ENDPOINT, IBusiness, IBusinessCreate, IHttpClient, IQueryP
 import { stringifyQueryObject } from '../../../utils'
 
 export class BusinessEndpoint {
-  public path = `${ENDPOINT.BUSINESS}`
+  public path = `${ENDPOINT.BUSINESSES}`
   constructor(protected readonly client: IHttpClient) {}
 
   /**

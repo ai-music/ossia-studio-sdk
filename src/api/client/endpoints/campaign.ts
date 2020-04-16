@@ -2,7 +2,7 @@ import { ENDPOINT, ApiResponse, IHttpClient, ICampaign, ICampaignCreate, IQueryP
 import { stringifyQueryObject } from '../../../utils'
 
 export class CampaignEndpoint {
-  public path = `${ENDPOINT.CAMPAIGN}`
+  public path = `${ENDPOINT.CAMPAIGNS}`
   constructor(protected readonly client: IHttpClient) {}
 
   /**

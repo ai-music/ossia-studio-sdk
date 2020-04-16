@@ -13,14 +13,14 @@ export enum HTTP_METHOD {
 export enum ENDPOINT {
   AUTH = 'auth',
   APPLICATIONS = 'applications',
-  BUSINESS = 'businesses',
-  TRACK = 'tracks',
-  USER = 'users',
-  CAMPAIGN = 'campaigns',
+  BUSINESSES = 'businesses',
+  TRACKS = 'tracks',
+  USERS = 'users',
+  CAMPAIGNS = 'campaigns',
   REMIX_ENGINE = 'remix-engine',
-  VOCAL_TRACK = 'vocal-tracks',
-  BACKING_TRACK = 'backing-tracks',
-  REMIX_TRACK = 'remix-tracks',
+  VOCAL_TRACKS = 'vocal-tracks',
+  BACKING_TRACKS = 'backing-tracks',
+  REMIX_TRACKS = 'remix-tracks',
 }
 
 export enum CLIENT_TYPE {
@@ -99,7 +99,7 @@ export interface IBusiness extends IEntity {
   ownerId: string
 }
 
-export type IImmutableFields = 'ownerId' | 'id' | 'createdAt'
+export type IImmutableFields = 'ownerId' | 'ownerType' | 'id' | 'createdAt'
 
 export type IBusinessCreate = Omit<IBusiness, IImmutableFields>
 
@@ -431,4 +431,197 @@ export interface IVocalTrack extends IEntity {
 
 export interface IRemixTrack extends IEntity {
   id: string
+}
+
+export interface IBackingTrack extends IEntity {
+  title: string
+  tempo: number
+  templateUId: string
+  zeroTime: number[]
+  remixSections: IRemixSection[]
+  radioSections: IRadioSection[]
+  author: string
+  instrumentation: INSTRUMENTATION[]
+  mood: MOOD[]
+  musicStyle: MUSIC_STYLE[]
+  percussionId: string
+  melodyTimbreId: string
+  vocalId: string
+  clipId: string
+  drumId: string
+  fxId: string
+  musicalKey: MUSICAL_KEY
+  totalLength: number
+  state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.UPLOADED | STATE.DELETED
+  storage?: Partial<IGenericTrackStorage>
+  uploadPolicy?: IAwsUploadPolicy
+  ownerType: string
+  ownerId: string
+}
+
+export type IImmutableBackingTrackCreateFields = IImmutableFields | 'state' | 'uploadPolicy' | 'storage'
+export type IBackingTrackCreate = Omit<IBackingTrack, IImmutableBackingTrackCreateFields>
+
+export interface IBackingTrackAudioFiles {
+  originalBackingTrackAudio: File | Buffer
+  previewBackingTrackAudio: File | Buffer
+}
+
+export interface IBackingTrackFilters {
+  instrumentation?: INSTRUMENTATION[]
+  mood?: MOOD[]
+  musicStyle?: MUSIC_STYLE[]
+  tempo?: [number, number]
+  clipId?: string
+  ids?: string[]
+  state?: STATE
+}
+
+export interface IBackingTrackQueryParameters extends IQueryParameters {
+  filters?: IBackingTrackFilters
+}
+
+export enum MUSIC_STYLE {
+  AMBIENT = 'AMBIENT',
+  BLUES = 'BLUES',
+  FESTIVE = 'FESTIVE',
+  COUNTRY = 'COUNTRY',
+  FOLK = 'FOLK',
+  ACOUSTIC = 'ACOUSTIC',
+  FUNK_SOUL = 'FUNK___SOUL',
+  HIP_HOP = 'HIP_HOP',
+  RNB = 'RNB',
+  INDIE = 'INDIE',
+  JAZZ = 'JAZZ',
+  LATIN = 'LATIN',
+  WORLD_MUSIC = 'WORLD_MUSIC',
+  CLASSICAL = 'CLASSICAL',
+  POP = 'POP',
+  REGGAE = 'REGGAE',
+  ROCK = 'ROCK',
+  DEEP_HOUSE = 'DEEP_HOUSE',
+  DRUM_BASS = 'DRUM___BASS',
+  DUBSTEP = 'DUBSTEP',
+  GARAGE_GRIME_BASSLINE = 'GARAGE__GRIME__BASSLINE',
+  TECHNO = 'TECHNO',
+  HOUSE = 'HOUSE',
+  TRANCE = 'TRANCE',
+  TRAP = 'TRAP',
+  PSY_TRANCE = 'PSY_TRANCE',
+  ELECTRONICA_DOWNTEMPO = 'ELECTRONICA__DOWNTEMPO',
+  INDIE_DANCE_NU_DISCO = 'INDIE_DANCE__NU_DISCO',
+  FUTURE_BASS = 'FUTURE_BASS',
+  AFRO_BEATS = 'AFRO_BEATS',
+  BREAKBEAT = 'BREAKBEAT',
+  LO_FI = 'LO_FI',
+  ELECTRONIC = 'ELECTRONIC',
+}
+
+export enum INSTRUMENTATION {
+  BRASS = 'BRASS',
+  SYNTHESIZERS = 'SYNTHESIZERS',
+  KEYS = 'KEYS',
+  ORCHESTRAL = 'ORCHESTRAL',
+  PERCUSSIVE = 'PERCUSSIVE',
+  STRINGS = 'STRINGS',
+  GUITARS = 'GUITARS',
+  WOODWIND = 'WOODWIND',
+}
+
+export enum MOOD {
+  ANGRY = 'ANGRY',
+  ANTHEMIC = 'ANTHEMIC',
+  AWKWARD = 'AWKWARD',
+  BEAUTIFUL = 'BEAUTIFUL',
+  BRIGHT_CHEERFUL = 'BRIGHT__CHEERFUL',
+  CALM = 'CALM',
+  CELEBRATORY = 'CELEBRATORY',
+  CHEESEY = 'CHEESEY',
+  COLD = 'COLD',
+  DARK = 'DARK',
+  DRAMATIC = 'DRAMATIC',
+  DREAMY = 'DREAMY',
+  DRIVING = 'DRIVING',
+  ENERGETIC = 'ENERGETIC',
+  EXCITEMENT = 'EXCITEMENT',
+  FRANTIC = 'FRANTIC',
+  COMEDIC = 'COMEDIC',
+  CREEPY = 'CREEPY',
+  HAPPY = 'HAPPY',
+  HEROIC = 'HEROIC',
+  FEAR = 'FEAR',
+  HYPNOTIC = 'HYPNOTIC',
+  CURIOUS = 'CURIOUS',
+  INSPIRATIONAL = 'INSPIRATIONAL',
+  INTIMATE = 'INTIMATE',
+  WHIMSICAL = 'WHIMSICAL',
+  MELLOW = 'MELLOW',
+  TENSE = 'TENSE',
+  GLAMAROUS = 'GLAMAROUS',
+  MAGICAL = 'MAGICAL',
+  BLAND = 'BLAND',
+  NOSTALGIC = 'NOSTALGIC',
+  SWEEPING = 'SWEEPING',
+  PASTORAL = 'PASTORAL',
+  POSITIVE_OPTIMISTIC = 'POSITIVE__OPTIMISTIC',
+  POWERFUL = 'POWERFUL',
+  QUIRKY = 'QUIRKY',
+  FORMAL = 'FORMAL',
+  ROMANTIC = 'ROMANTIC',
+  SAD = 'SAD',
+  SEXY = 'SEXY',
+  SPARSE = 'SPARSE',
+  THOUGHTFUL = 'THOUGHTFUL',
+  WARM = 'WARM',
+}
+
+export enum MUSICAL_KEY {
+  'C' = 'C',
+  'C#' = 'C#',
+  'D' = 'D',
+  'D#' = 'D#',
+  'E' = 'E',
+  'F' = 'F',
+  'F#' = 'F#',
+  'G' = 'G',
+  'G#' = 'G#',
+  'A' = 'A',
+  'A#' = 'A#',
+  'B' = 'B',
+  'Cm' = 'Cm',
+  'C#m' = 'C#m',
+  'Dm' = 'Dm',
+  'D#m' = 'D#m',
+  'Em' = 'Em',
+  'Fm' = 'Fm',
+  'F#m' = 'F#m',
+  'Gm' = 'Gm',
+  'G#m' = 'G#m',
+  'Am' = 'Am',
+  'A#m' = 'A#m',
+  'Bm' = 'Bm',
+}
+
+export interface IRemixSection {
+  name: string
+  start: [number, number]
+  end: [number, number]
+  energy: number
+  division: number
+  compatibility: string[]
+}
+
+export type IRadioSection = IRemixSection
+
+export interface IGenericTrackStorage {
+  original_wav: string
+  original_mp3: string
+  preview_mp3: string
+}
+
+export interface IAwsUploadPolicy {
+  url: string
+  fields: {
+    [key: string]: any
+  }
 }
