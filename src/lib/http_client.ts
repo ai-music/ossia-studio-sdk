@@ -16,7 +16,7 @@ export class HttpClient implements IHttpClient {
       .catch(error => this.errorParser(error, endpoint, HTTP_METHOD.POST))
   }
 
-  public get<T>(endpoint: string, parameters?: any): ApiResponse<T> {
+  public get<T>(endpoint: string, parameters?: unknown): ApiResponse<T> {
     return Axios.get(`${this.api}/${endpoint}`, {
       params: parameters || null,
       ...this.getRequestConfig(),
