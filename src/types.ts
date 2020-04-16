@@ -1,5 +1,6 @@
 export enum HOST {
   API = 'https://ossia-studio-api.aimusic.services',
+  SOCKETS = 'https://ossia-studio-sockets.aimusic.services',
 }
 
 export enum HTTP_METHOD {
@@ -55,7 +56,9 @@ export interface IAuthEndpoint {
 
 export interface IHttpClient {
   post<Input, Output>(path: string, payload: Input): ApiResponse<Output>
+
   get<Output, Input = {}>(path: string, payload?: Input): ApiResponse<Output>
+
   put<Input>(path: string, payload: Input): ApiResponse<Input>
 }
 
@@ -384,6 +387,7 @@ export enum STATE {
 export interface ICampaignCreate {
   title: string
 }
+
 export interface ICampaign extends IEntity {
   title: string
   state: STATE.DELETED | STATE.READY
@@ -397,4 +401,34 @@ export interface ICampaign extends IEntity {
     state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.PROCESSING
     error?: string
   }
+}
+
+export enum WEBSOCKET_EVENT {
+  CONNECT = 'connect',
+  CONNECT_ERROR = 'connect_error',
+  VOCAL_TRACK_READY = 'VOCAL_TRACK_READY',
+  VOCAL_TRACK_ERROR = 'VOCAL_TRACK_ERROR',
+  REMIX_TRACK_MASTER_READY = 'REMIX_TRACK_MASTER_READY',
+  REMIX_TRACK_MASTER_ERROR = 'REMIX_TRACK_MASTER_ERROR',
+  CAMPAIGN_MASTER_READY = 'CAMPAIGN_MASTER_READY',
+  CAMPAIGN_MASTER_ERROR = 'CAMPAIGN_MASTER_ERROR',
+}
+
+export interface IJwtDecoded {
+  role: string
+  ownerId: string
+  permission: number
+  iat: number
+  exp: number
+  aud: string
+  iss: string
+  sub: string
+}
+
+export interface IVocalTrack extends IEntity {
+  id: string
+}
+
+export interface IRemixTrack extends IEntity {
+  id: string
 }

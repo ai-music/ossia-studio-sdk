@@ -1,25 +1,36 @@
-import dotenv from 'dotenv'
-dotenv.config()
-import { ApiResponse, CLIENT_TYPE, HOST, IApplication, IApplicationCreate, ICredentials } from '../../types'
+import env from 'dotenv'
+import { ApiResponse, CLIENT_TYPE, HOST, IApplication, IApplicationCreate, ICredentials, IJwtDecoded } from '../../types'
 import { AuthEndpoint, ApplicationEndpoint, BusinessEndpoint, CampaignEndpoint } from './endpoints'
 import { HttpClient } from '../../lib/http_client'
+import { Socket } from './sockets'
+import jwt from 'jsonwebtoken'
+
+env.config()
 
 export class ApiClient {
-  protected jwt: string
+  public jwt: string
+  public jwtDecoded: IJwtDecoded
+  public socketClient: Socket
+  public auth: AuthEndpoint
+  public application: ApplicationEndpoint
+  public business: BusinessEndpoint
+  public campaign: CampaignEndpoint
+
   protected credentials: Partial<ICredentials>
-  protected client = new HttpClient()
-  public auth: AuthEndpoint = new AuthEndpoint(this.client)
-  public application: ApplicationEndpoint = new ApplicationEndpoint(this.client)
-  public business: BusinessEndpoint = new BusinessEndpoint(this.client)
-  public campaign: CampaignEndpoint = new CampaignEndpoint(this.client)
+  protected client: HttpClient
 
   protected constructor(credentials: Partial<ICredentials>, public readonly host: string, public type: CLIENT_TYPE) {
     this.credentials = credentials
+    this.client = new HttpClient()
+    this.auth = new AuthEndpoint(this.client)
+    this.application = new ApplicationEndpoint(this.client)
+    this.business = new BusinessEndpoint(this.client)
+    this.campaign = new CampaignEndpoint(this.client)
   }
 
   /**
-   * This method allows you to create your first application.
-   * Bare in mind that every application needs to be validated before it can be used.
+   * This method allows you to create an application.
+   * Bear in mind that every application needs to be accepted and activated before it can be used.
    * @param payload
    */
   static createApp(payload: IApplicationCreate): ApiResponse<Partial<IApplication>> {
@@ -60,6 +71,17 @@ export class ApiClient {
       response = await this.auth.create({ email, password })
     }
     this.jwt = response.data.token
+    this.jwtDecoded = jwt.decode(this.jwt) as IJwtDecoded
     this.client.setJWT(this.jwt)
+  }
+
+  /**
+   * Retrieves the websocket client
+   */
+  public getWebSocket(): Socket {
+    if (!this.socketClient) {
+      this.socketClient = new Socket(this.jwt, this.jwtDecoded.ownerId)
+    }
+    return this.socketClient
   }
 }
