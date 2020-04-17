@@ -1,13 +1,12 @@
 import * as qs from 'qs'
 import * as request from 'request'
-
 import { IQueryParameters, IAwsUploadPolicy } from '../types'
 
 export function stringifyQueryObject(queryParameters: IQueryParameters): string {
   return qs.stringify(queryParameters)
 }
 
-export function uploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File | Buffer, key: string): Promise<any> {
+export function uploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File | Buffer, key?: string): Promise<any> {
   if (!policy.fields || !policy.url) {
     console.log('AWS Policy is not valid >>>', policy)
     return new Promise((resolve, reject) => reject('uploadFileWithAwsPolicy: AWS Policy is not valid'))
@@ -22,19 +21,28 @@ export function uploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File | B
   }
 }
 
-export async function nodeUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: Buffer, key: string) {
+export async function nodeUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: Buffer, key?: string): Promise<void> {
   return new Promise<any>((resolve, reject) => {
     const { fields, url } = policy
-
-    const payload = {
-      url,
-      formData: {
-        ...fields,
-        key,
-        file,
-      },
+    let payload = null
+    if (key) {
+      payload = {
+        url,
+        formData: {
+          ...fields,
+          key,
+          file,
+        },
+      }
+    } else {
+      payload = {
+        url,
+        formData: {
+          ...fields,
+          file,
+        },
+      }
     }
-
     request.post(payload, (error, response) => {
       if (error) {
         return reject(error)
@@ -47,21 +55,20 @@ export async function nodeUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file
   })
 }
 
-export async function browserUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File, key: string) {
+export async function browserUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File, key?: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const { fields, url } = policy
-
     const formData = new FormData()
     Object.keys(fields).forEach((field: string) => {
       formData.append(field, fields[field])
     })
-    formData.append('key', key)
+    key && formData.append('key', key)
     formData.append('file', file)
 
     const xhr = new XMLHttpRequest()
     xhr.open('POST', url, true)
     xhr.send(formData)
-    xhr.onload = function() {
+    xhr.onload = function(): void {
       this.status === 204 ? resolve() : reject(this.responseText)
     }
   })

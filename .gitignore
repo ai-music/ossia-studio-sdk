@@ -1,6 +1,7 @@
 node_modules
 local.ts
 local.sh
+local.html
 .idea
 architecture/development/volumes/*
 !architecture/development/volumes/.gitkeep

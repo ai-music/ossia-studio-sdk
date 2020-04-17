@@ -1,7 +1,7 @@
 import { ApiResponse, ENDPOINT, IHttpClient, IUserCreate, IUserDashboard, IUserFavourites, IUserPayload, IUserActivate } from '../../../types'
 
 export class UserEndpoint {
-  public path = `${ENDPOINT.USER}`
+  public path = `${ENDPOINT.USERS}`
   constructor(protected readonly client: IHttpClient) {}
 
   /**

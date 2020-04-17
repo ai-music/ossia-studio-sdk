@@ -12,6 +12,9 @@ export enum HTTP_METHOD {
 }
 
 export enum ENDPOINT {
+  FAVOURITES = 'favourites',
+  DASHBOARD = 'dashboard',
+  AUTH = 'auth',
   ACTIVATE = 'activate',
   APPLICATIONS = 'applications',
   BUSINESSES = 'businesses',
@@ -464,9 +467,12 @@ export interface IBackingTrack extends IEntity {
 export type IImmutableBackingTrackCreateFields = IImmutableFields | 'state' | 'uploadPolicy' | 'storage'
 export type IBackingTrackCreate = Omit<IBackingTrack, IImmutableBackingTrackCreateFields>
 
-export interface IBackingTrackAudioFiles {
-  originalBackingTrackAudio: File | Buffer
-  previewBackingTrackAudio: File | Buffer
+export interface ITrackAudioFiles {
+  originalTrackAudio: File | Buffer
+}
+
+export interface IBackingTrackAudioFile extends ITrackAudioFiles {
+  previewTrackAudio: File | Buffer
 }
 
 export interface IBackingTrackFilters {
@@ -672,3 +678,32 @@ export interface IUserDashboard {
 export interface IUserFavourites {
   favourite: string
 }
+
+export interface IGenericTrackStorage {
+  original_wav: string
+  original_mp3: string
+  preview_mp3: string
+}
+
+export interface IRemixTrack extends IEntity {
+  title: string
+  markers: any[]
+  remixEngineIndex: number
+
+  tempo: number
+  state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.UPLOADED | STATE.DELETED
+  master: {
+    storage: string | null
+    storageKey: string | null
+    state: STATE.PENDING | STATE.READY | STATE.ERROR
+    error?: string
+  }
+  uploadPolicy?: IAwsUploadPolicy
+  storage?: Partial<IGenericTrackStorage>
+
+  vocalTrackId: string
+  backingTrackId: string
+}
+
+export type IImmutableRemixTrackCreateFields = IImmutableFields | 'state' | 'uploadPolicy' | 'storage' | 'master' | 'tempo'
+export type IRemixTrackCreate = Omit<IRemixTrack, IImmutableRemixTrackCreateFields>
