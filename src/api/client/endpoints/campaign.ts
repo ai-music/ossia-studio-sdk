@@ -31,6 +31,7 @@ export class CampaignEndpoint {
       const queryParameters = stringifyQueryObject(parameters)
       return this.client.get<ICampaign[]>(`${this.path}?${queryParameters}`)
     }
+    return this.client.get<ICampaign[]>(this.path)
   }
 
   /**

@@ -1,9 +1,16 @@
 import env from 'dotenv'
 import { ApiResponse, CLIENT_TYPE, HOST, IApplication, IApplicationCreate, ICredentials, IJwtDecoded } from '../../types'
-import { AuthEndpoint, ApplicationEndpoint, BusinessEndpoint, CampaignEndpoint, UserEndpoint } from './endpoints'
+import {
+  AuthEndpoint,
+  ApplicationEndpoint,
+  BusinessEndpoint,
+  CampaignEndpoint,
+  UserEndpoint,
+  BackingTrackEndpoint,
+  RemixTrackEndpoint,
+} from './endpoints'
 import { HttpClient } from '../../lib/http_client'
 import { Socket } from './sockets'
-import { BackingTrackEndpoint } from './endpoints/backing_track'
 import jwt from 'jsonwebtoken'
 
 env.config()
@@ -14,9 +21,10 @@ export class ApiClient {
   public socketClient: Socket
   public auth: AuthEndpoint
   public application: ApplicationEndpoint
-  public backingtrack: BackingTrackEndpoint
+  public backingTrack: BackingTrackEndpoint
   public business: BusinessEndpoint
   public campaign: CampaignEndpoint
+  public remixTrack: RemixTrackEndpoint
   public user: UserEndpoint
 
   protected credentials: Partial<ICredentials>
@@ -27,9 +35,10 @@ export class ApiClient {
     this.client = new HttpClient()
     this.auth = new AuthEndpoint(this.client)
     this.application = new ApplicationEndpoint(this.client)
-    this.backingtrack = new BackingTrackEndpoint(this.client)
+    this.backingTrack = new BackingTrackEndpoint(this.client)
     this.business = new BusinessEndpoint(this.client)
     this.campaign = new CampaignEndpoint(this.client)
+    this.remixTrack = new RemixTrackEndpoint(this.client)
     this.user = new UserEndpoint(this.client)
   }
 
