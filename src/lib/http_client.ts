@@ -31,6 +31,13 @@ export class HttpClient implements IHttpClient {
       .catch(error => this.errorParser(error, endpoint, HTTP_METHOD.PUT))
   }
 
+  //TODO: @DT-893 - Temp patch/put method
+  public patch<I, O>(endpoint: string, payload: I): ApiResponse<O> {
+    return Axios.put(`${this.api}/${endpoint}`, payload, this.getRequestConfig())
+      .then(({ data, ...request }) => ({ ...data, status: request.status }))
+      .catch(error => this.errorParser(error, endpoint, HTTP_METHOD.PATCH))
+  }
+
   protected getRequestConfig(): AxiosRequestConfig {
     const config: AxiosRequestConfig = {
       headers: {

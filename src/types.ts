@@ -8,10 +8,11 @@ export enum HTTP_METHOD {
   GET = 'get',
   PUT = 'put',
   DELETE = 'delete',
+  PATCH = 'patch',
 }
 
 export enum ENDPOINT {
-  AUTH = 'auth',
+  ACTIVATE = 'activate',
   APPLICATIONS = 'applications',
   BUSINESSES = 'businesses',
   TRACKS = 'tracks',
@@ -60,6 +61,7 @@ export interface IHttpClient {
   get<Output, Input = {}>(path: string, payload?: Input): ApiResponse<Output>
 
   put<Input>(path: string, payload: Input): ApiResponse<Input>
+  patch<Input, Output>(path: string, payload: Input): ApiResponse<Output>
 }
 
 export type ApiResponse<T> = Promise<IApiResponse<T>>
@@ -624,4 +626,49 @@ export interface IAwsUploadPolicy {
   fields: {
     [key: string]: any
   }
+}
+
+export enum ROLE {
+  ADMIN = 'admin',
+  USER = 'user',
+  APPLICATION = 'application',
+}
+
+export interface IUser extends IEntity {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  state: STATE.ACTIVE | STATE.PENDING | STATE.SUSPENDED
+  role: ROLE.USER | ROLE.ADMIN
+  telephoneNumber?: string
+  permission: number
+  mailingList: boolean
+  favourites: string[]
+}
+
+export type IImmutableUserCreateFields = IImmutableFields | 'state' | 'role' | 'permission' | 'favourites'
+
+export type IUserCreate = Omit<IUser, IImmutableUserCreateFields>
+
+export type IUserPayload = Omit<IUser, 'password'>
+
+export interface IUserActivate {
+  token: string
+}
+
+export interface IUserDashboard {
+  vocalTracks: {
+    pending: number
+    ready: number
+    error: number
+  }
+  campaigns: {
+    active: number
+  }
+  recentCampaigns: ICampaign[]
+}
+
+export interface IUserFavourites {
+  favourite: string
 }

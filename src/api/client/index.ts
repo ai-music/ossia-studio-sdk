@@ -1,6 +1,6 @@
 import env from 'dotenv'
 import { ApiResponse, CLIENT_TYPE, HOST, IApplication, IApplicationCreate, ICredentials, IJwtDecoded } from '../../types'
-import { AuthEndpoint, ApplicationEndpoint, BusinessEndpoint, CampaignEndpoint } from './endpoints'
+import { AuthEndpoint, ApplicationEndpoint, BusinessEndpoint, CampaignEndpoint, UserEndpoint } from './endpoints'
 import { HttpClient } from '../../lib/http_client'
 import { Socket } from './sockets'
 import { BackingTrackEndpoint } from './endpoints/backing_track'
@@ -17,6 +17,7 @@ export class ApiClient {
   public backingtrack: BackingTrackEndpoint
   public business: BusinessEndpoint
   public campaign: CampaignEndpoint
+  public user: UserEndpoint
 
   protected credentials: Partial<ICredentials>
   protected client: HttpClient
@@ -29,6 +30,7 @@ export class ApiClient {
     this.backingtrack = new BackingTrackEndpoint(this.client)
     this.business = new BusinessEndpoint(this.client)
     this.campaign = new CampaignEndpoint(this.client)
+    this.user = new UserEndpoint(this.client)
   }
 
   /**
