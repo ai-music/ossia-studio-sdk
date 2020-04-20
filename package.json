@@ -1,5 +1,5 @@
 {
-  "name": "ossia-studio-sdk",
+  "name": "@ai-music/ossia-studio-sdk",
   "version": "1.0.0",
   "main": "index.js",
   "author": "AIMUSIC",
