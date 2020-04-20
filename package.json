@@ -2,12 +2,16 @@
   "name": "ossia-studio-sdk",
   "version": "1.0.0",
   "main": "dist/api/client/index.js",
+  "types": "dist/types.d.ts",
   "author": "AIMUSIC",
   "license": "MIT",
   "private": false,
   "scripts": {
     "test": "jest"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/jsonwebtoken": "^8.3.9",

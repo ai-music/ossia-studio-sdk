@@ -13,6 +13,6 @@ fi
 if [[ "$1" == "${PRODUCTION_BRANCH}" ]]; then
   # Bump Version
   cd ${CODEBUILD_SRC_DIR}
-  yarn tsc
+  yarn tsc --declaration
   npx semantic-release
 fi
