@@ -6,7 +6,7 @@ export function stringifyQueryObject(queryParameters: IQueryParameters): string 
   return qs.stringify(queryParameters)
 }
 
-export function uploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File | Buffer, key?: string): Promise<any> {
+export function uploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File | Buffer, key?: string): Promise<number> {
   if (!policy.fields || !policy.url) {
     console.log('AWS Policy is not valid >>>', policy)
     return new Promise((resolve, reject) => reject('uploadFileWithAwsPolicy: AWS Policy is not valid'))
@@ -21,8 +21,8 @@ export function uploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File | B
   }
 }
 
-export async function nodeUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: Buffer, key?: string): Promise<void> {
-  return new Promise<any>((resolve, reject) => {
+export async function nodeUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: Buffer, key?: string): Promise<number> {
+  return new Promise<number>((resolve, reject) => {
     const { fields, url } = policy
     let payload = null
     if (key) {
@@ -55,7 +55,7 @@ export async function nodeUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file
   })
 }
 
-export async function browserUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File, key?: string): Promise<void> {
+export async function browserUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File, key?: string): Promise<number> {
   return new Promise((resolve, reject) => {
     const { fields, url } = policy
     const formData = new FormData()
@@ -69,7 +69,7 @@ export async function browserUploadFileWithAwsPolicy(policy: IAwsUploadPolicy, f
     xhr.open('POST', url, true)
     xhr.send(formData)
     xhr.onload = function(): void {
-      this.status === 204 ? resolve() : reject(this.responseText)
+      this.status === 204 ? resolve(this.status) : reject(this.responseText)
     }
   })
 }
