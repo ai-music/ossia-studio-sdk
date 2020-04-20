@@ -22,5 +22,4 @@ if [[ "${1}" == "${PRODUCTION_BRANCH}" ]]; then
      cd ${CODEBUILD_SRC_DIR}
      cp /root/.npmrc ${CODEBUILD_SRC_DIR}
      yarn
-     yarn tsc
 fi
