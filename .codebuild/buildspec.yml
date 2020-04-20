@@ -1,0 +1,26 @@
+version: 0.2
+
+# Env reference:
+# https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
+env:
+  variables:
+    AI_MUSIC_AWS_ACCOUNT_ID: '581204581864'
+    AI_MUSIC_APP: 'ossia-studio-sdk'
+    PRODUCTION_BRANCH: 'master'
+phases:
+  install:
+    commands:
+      # Env
+      - export BRANCH=${CODEBUILD_WEBHOOK_TRIGGER#*branch/}
+      - export GH_TOKEN=${AI_MUSIC_GITHUB_TOKEN}
+      - export AI_MUSIC_STAGE=$(${CODEBUILD_SRC_DIR}/.codebuild/scripts/get_stage.sh ${BRANCH})
+      - export NEXT_VERSION=$(${CODEBUILD_SRC_DIR}/.codebuild/scripts/get_next_version.sh ${BRANCH})
+      - export BUILD_VERSION=${NEXT_VERSION}
+      - export PATH=/root/.local/bin:$PATH
+      - echo "AIMUSIC_STAGE ${AI_MUSIC_STAGE} - NEXT_VERSION ${NEXT_VERSION} - BUILD_VERSION ${BUILD_VERSION}"
+  build:
+    commands:
+      - ${CODEBUILD_SRC_DIR}/.codebuild/scripts/build.sh ${BRANCH}
+  post_build:
+    commands:
+      - ${CODEBUILD_SRC_DIR}/.codebuild/scripts/post_build.sh ${BRANCH}
