@@ -1,4 +1,4 @@
-import { ENDPOINT, ApiResponse, IHttpClient, IRemixTrack, IRemixTrackCreate, IQueryParameters, ITrackAudioFiles } from '../../../types'
+import { ENDPOINT, ApiResponse, IHttpClient, IRemixTrack, IRemixTrackCreate, IQueryParameters, TAudioFile } from '../../../types'
 import { stringifyQueryObject, uploadFileWithAwsPolicy } from '../../../utils'
 
 export class RemixTrackEndpoint {
@@ -8,10 +8,10 @@ export class RemixTrackEndpoint {
   /**
    * This method allows you to create a new remix track
    * @param payload
+   * @param originalTrackAudio
    */
-  public async create(payload: IRemixTrackCreate & ITrackAudioFiles): ApiResponse<IRemixTrack> {
-    const { originalTrackAudio, ...rest } = payload
-    const response = this.client.post<IRemixTrackCreate, IRemixTrack>(this.path, rest)
+  public async create(payload: IRemixTrackCreate, originalTrackAudio: TAudioFile): ApiResponse<IRemixTrack> {
+    const response = this.client.post<IRemixTrackCreate, IRemixTrack>(this.path, payload)
     const { data } = await response
     await uploadFileWithAwsPolicy(data.uploadPolicy, originalTrackAudio)
     return response

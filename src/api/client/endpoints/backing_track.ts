@@ -1,12 +1,4 @@
-import {
-  ENDPOINT,
-  IHttpClient,
-  ApiResponse,
-  IBackingTrackCreate,
-  IBackingTrack,
-  IBackingTrackQueryParameters,
-  IBackingTrackAudioFile,
-} from '../../../types'
+import { ENDPOINT, IHttpClient, ApiResponse, IBackingTrackCreate, IBackingTrack, IBackingTrackQueryParameters, TAudioFile } from '../../../types'
 import { stringifyQueryObject, uploadFileWithAwsPolicy } from '../../../utils'
 
 export class BackingTrackEndpoint {
@@ -16,13 +8,16 @@ export class BackingTrackEndpoint {
   /**
    * This method will allow you to create a backing track
    * @param payload
+   * @param originalTrack
+   * @param previewTrack
    */
-  public async create(payload: IBackingTrackCreate & IBackingTrackAudioFile): ApiResponse<IBackingTrack> {
-    const { originalTrackAudio, previewTrackAudio, ...rest } = payload
-    const response = this.client.post<IBackingTrackCreate, IBackingTrack>(this.path, rest)
+  public async create(payload: IBackingTrackCreate, originalTrack: TAudioFile, previewTrack: TAudioFile): ApiResponse<IBackingTrack> {
+    const response = this.client.post<IBackingTrackCreate, IBackingTrack>(this.path, payload)
     const { data } = await response
-    await uploadFileWithAwsPolicy(data.uploadPolicy, originalTrackAudio, `backing_tracks/${data.id}/original.wav`)
-    await uploadFileWithAwsPolicy(data.uploadPolicy, previewTrackAudio, `backing_tracks/${data.id}/preview.mp3`)
+    await Promise.all([
+      uploadFileWithAwsPolicy(data.uploadPolicy, originalTrack, `backing_tracks/${data.id}/original.wav`),
+      uploadFileWithAwsPolicy(data.uploadPolicy, previewTrack, `backing_tracks/${data.id}/preview.mp3`),
+    ])
     return response
   }
 

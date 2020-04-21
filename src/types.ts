@@ -78,9 +78,19 @@ export interface IAuthResponse {
   token: string
 }
 
+export enum OWNER_TYPE {
+  APPLICATION = 'application',
+  USER = 'user',
+}
+
 export interface IEntity {
   id?: string
   createdAt: Date
+}
+
+export interface IOwnerIdentity {
+  ownerId: string
+  ownerType: OWNER_TYPE
 }
 
 export interface IApplication extends IEntity {
@@ -105,6 +115,8 @@ export interface IBusiness extends IEntity {
 }
 
 export type IImmutableFields = 'ownerId' | 'ownerType' | 'id' | 'createdAt'
+
+export type IImmutableTrackFields = 'storage' | 'uploadPolicy'
 
 export type IBusinessCreate = Omit<IBusiness, IImmutableFields>
 
@@ -393,13 +405,11 @@ export interface ICampaignCreate {
   title: string
 }
 
-export interface ICampaign extends IEntity {
+export interface ICampaign extends IEntity, IOwnerIdentity {
   title: string
   state: STATE.DELETED | STATE.READY
   vocalTracks: string[]
   remixTracks: string[]
-  ownerType: string
-  ownerId: string
   master: {
     storage: string | null
     storageKey: string | null
@@ -430,15 +440,19 @@ export interface IJwtDecoded {
   sub: string
 }
 
-export interface IVocalTrack extends IEntity {
-  id: string
+export interface IVocalTrack extends IEntity, IOwnerIdentity {
+  title: string
+  length: number
+  score: number
+  state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.UPLOADED | STATE.DELETED
+  storage?: Partial<IGenericTrackStorage>
+  uploadPolicy?: IAwsUploadPolicy
 }
 
-export interface IRemixTrack extends IEntity {
-  id: string
-}
+export type IImmutableVocalTrackCreateFields = IImmutableFields | IImmutableTrackFields | 'state' | 'score'
+export type IVocalTrackCreate = Omit<IVocalTrack, IImmutableVocalTrackCreateFields>
 
-export interface IBackingTrack extends IEntity {
+export interface IBackingTrack extends IEntity, IOwnerIdentity {
   title: string
   tempo: number
   templateUId: string
@@ -460,8 +474,6 @@ export interface IBackingTrack extends IEntity {
   state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.UPLOADED | STATE.DELETED
   storage?: Partial<IGenericTrackStorage>
   uploadPolicy?: IAwsUploadPolicy
-  ownerType: string
-  ownerId: string
 }
 
 export type IImmutableBackingTrackCreateFields = IImmutableFields | 'state' | 'uploadPolicy' | 'storage'
@@ -470,6 +482,8 @@ export type IBackingTrackCreate = Omit<IBackingTrack, IImmutableBackingTrackCrea
 export interface ITrackAudioFiles {
   originalTrackAudio: File | Buffer
 }
+
+export type TAudioFile = File | Buffer
 
 export interface IBackingTrackAudioFile extends ITrackAudioFiles {
   previewTrackAudio: File | Buffer
@@ -685,11 +699,10 @@ export interface IGenericTrackStorage {
   preview_mp3: string
 }
 
-export interface IRemixTrack extends IEntity {
+export interface IRemixTrack extends IEntity, IOwnerIdentity {
   title: string
   markers: any[]
   remixEngineIndex: number
-
   tempo: number
   state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.UPLOADED | STATE.DELETED
   master: {
@@ -700,10 +713,9 @@ export interface IRemixTrack extends IEntity {
   }
   uploadPolicy?: IAwsUploadPolicy
   storage?: Partial<IGenericTrackStorage>
-
   vocalTrackId: string
   backingTrackId: string
 }
 
-export type IImmutableRemixTrackCreateFields = IImmutableFields | 'state' | 'uploadPolicy' | 'storage' | 'master' | 'tempo'
+export type IImmutableRemixTrackCreateFields = IImmutableFields | IImmutableTrackFields | 'state' | 'master' | 'tempo'
 export type IRemixTrackCreate = Omit<IRemixTrack, IImmutableRemixTrackCreateFields>
