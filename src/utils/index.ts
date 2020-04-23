@@ -6,6 +6,12 @@ export function stringifyQueryObject(queryParameters: IQueryParameters): string 
   return qs.stringify(queryParameters)
 }
 
+/**
+ * When using this function with a flexible policy the key argument is required
+ * @param policy
+ * @param file
+ * @param key
+ */
 export function uploadFileWithAwsPolicy(policy: IAwsUploadPolicy, file: File | Buffer, key?: string): Promise<number> {
   if (!policy.fields || !policy.url) {
     console.log('AWS Policy is not valid >>>', policy)
