@@ -1,13 +1,13 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { ApiResponse, HOST, HTTP_METHOD, IHttpClient } from '../types'
+import { ApiResponse, HOST, HTTP_METHOD, IHttpClient, IIdentity } from '../types'
 import { ApiError } from '../api/client/errors'
 
 export class HttpClient implements IHttpClient {
   protected api: string = process.env.HOST_API || HOST.API
-  constructor(protected jwt?: string | null) {}
+  protected jwt: string = null
 
-  public setJWT(token: string): void {
-    this.jwt = token
+  public setIdentity(identity: Partial<IIdentity>): void {
+    this.jwt = identity.token
   }
 
   public post<T>(endpoint: string, payload: Partial<T>): ApiResponse<T> {
