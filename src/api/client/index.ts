@@ -75,6 +75,9 @@ export class ApiClient {
       throw new Error('Invalid identity provided')
     }
     identity.decodedJwt = jwt.decode(identity.token) as IJwtDecoded
+    if (!identity.decodedJwt) {
+      throw new TypeError('Provided token is not valid')
+    }
     identity.isAuthenticated = true
     this.client.setIdentity(identity)
     return this
