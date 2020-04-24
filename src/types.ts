@@ -42,7 +42,12 @@ export interface IUserCredentials {
   password: string
 }
 
-export type ICredentials = IAppCredentials & IUserCredentials
+export type IIdentity = IAppCredentials &
+  IUserCredentials & {
+    isAuthenticated: boolean
+    token: string
+    decodedJwt: IJwtDecoded
+  }
 
 export interface IPaginator {
   from: number
@@ -55,7 +60,7 @@ export interface IQueryParameters {
 }
 
 export interface IAuthEndpoint {
-  create(payload: ICredentials): ApiResponse<IAuthResponse>
+  create(payload: IIdentity): ApiResponse<IAuthResponse>
 }
 
 export interface IHttpClient {
@@ -64,6 +69,7 @@ export interface IHttpClient {
   get<Output, Input = {}>(path: string, payload?: Input): ApiResponse<Output>
 
   put<Input>(path: string, payload: Input): ApiResponse<Input>
+
   patch<Input, Output>(path: string, payload: Input): ApiResponse<Output>
 }
 
@@ -643,9 +649,7 @@ export interface IGenericTrackStorage {
 
 export interface IAwsUploadPolicy {
   url: string
-  fields: {
-    [key: string]: any
-  }
+  fields: Record<string, string>
 }
 
 export enum ROLE {
@@ -701,7 +705,7 @@ export interface IGenericTrackStorage {
 
 export interface IRemixTrack extends IEntity, IOwnerIdentity {
   title: string
-  markers: any[]
+  markers: number[]
   remixEngineIndex: number
   tempo: number
   state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.UPLOADED | STATE.DELETED

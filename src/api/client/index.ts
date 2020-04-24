@@ -1,5 +1,5 @@
 import env from 'dotenv'
-import { ApiResponse, CLIENT_TYPE, HOST, IApplication, IApplicationCreate, ICredentials, IJwtDecoded } from '../../types'
+import { ApiResponse, HOST, IApplication, IApplicationCreate, IIdentity, IJwtDecoded } from '../../types'
 import {
   AuthEndpoint,
   ApplicationEndpoint,
@@ -17,8 +17,6 @@ import jwt from 'jsonwebtoken'
 env.config()
 
 export class ApiClient {
-  public jwt: string
-  public jwtDecoded: IJwtDecoded
   public socketClient: Socket
   public auth: AuthEndpoint
   public application: ApplicationEndpoint
@@ -28,12 +26,15 @@ export class ApiClient {
   public remixTrack: RemixTrackEndpoint
   public user: UserEndpoint
   public vocalTrack: VocalTrackEndpoint
-
-  protected credentials: Partial<ICredentials>
+  protected identity: Partial<IIdentity>
   protected client: HttpClient
+  private static instance: ApiClient
 
-  protected constructor(credentials: Partial<ICredentials>, public readonly host: string, public type: CLIENT_TYPE) {
-    this.credentials = credentials
+  protected constructor(identity: Partial<IIdentity>, public readonly host = HOST.API) {
+    if (!identity) {
+      throw Error('ApiClient: Identity is not set')
+    }
+    this.identity = identity
     this.client = new HttpClient()
     this.auth = new AuthEndpoint(this.client)
     this.application = new ApplicationEndpoint(this.client)
@@ -45,6 +46,51 @@ export class ApiClient {
     this.vocalTrack = new VocalTrackEndpoint(this.client)
   }
 
+  public static async getInstance(identity?: Partial<IIdentity>): Promise<ApiClient> {
+    if (!ApiClient.instance) {
+      ApiClient.instance = new ApiClient(identity)
+      return ApiClient.instance.authenticate(identity)
+    }
+    return ApiClient.instance
+  }
+
+  /**
+   * This method will authenticate the client(user or application) and store the JTW token
+   */
+  public async authenticate(identity: Partial<IIdentity>): Promise<ApiClient> {
+    const { email, password, apiKey, apiSecret, token } = identity
+    if (apiKey && apiSecret) {
+      const {
+        data: { token },
+      } = await this.auth.create({ apiKey, apiSecret })
+      identity.token = token
+    }
+    if (email && password) {
+      const {
+        data: { token },
+      } = await this.auth.create({ email, password })
+      identity.token = token
+    }
+    if (!token && !identity.token) {
+      throw new Error('Invalid identity provided')
+    }
+    identity.decodedJwt = jwt.decode(identity.token) as IJwtDecoded
+    this.client.setIdentity(identity)
+    return this
+  }
+
+  /**
+   * Retrieves the websocket client
+   */
+  public getWebSocket(): Socket {
+    if (!this.socketClient) {
+      this.socketClient = new Socket(this.identity.token, this.identity.decodedJwt.ownerId)
+      this.socketClient.connect()
+      return this.socketClient
+    }
+    return this.socketClient
+  }
+
   /**
    * This method allows you to create an application.
    * Bear in mind that every application needs to be accepted and activated before it can be used.
@@ -53,52 +99,5 @@ export class ApiClient {
   static createApp(payload: IApplicationCreate): ApiResponse<Partial<IApplication>> {
     const application: ApplicationEndpoint = new ApplicationEndpoint(new HttpClient())
     return application.create(payload)
-  }
-
-  /**
-   * This method here allows you to initialize your user client
-   * @param email
-   * @param password
-   * @param host
-   */
-  static getUserClient(email: string, password: string, host = process.env.HOST_API || HOST.API): ApiClient {
-    return new ApiClient({ email, password }, host, CLIENT_TYPE.USER)
-  }
-
-  /**
-   * This method here allows you to initialize your application client
-   * @param apiKey
-   * @param apiSecret
-   * @param host
-   */
-  static getApplicationClient(apiKey: string, apiSecret: string, host = process.env.HOST_API || HOST.API): ApiClient {
-    return new ApiClient({ apiKey, apiSecret }, host, CLIENT_TYPE.APP)
-  }
-
-  /**
-   * This method will authenticate the client(user or application) and store the JTW token
-   */
-  public async authenticate(): Promise<void> {
-    const { email, password, apiKey, apiSecret } = this.credentials
-    let response = { data: { token: this.jwt } }
-    if (apiKey && apiSecret) {
-      response = await this.auth.create({ apiKey, apiSecret })
-    }
-    if (email && password) {
-      response = await this.auth.create({ email, password })
-    }
-    this.jwt = response.data.token
-    this.jwtDecoded = jwt.decode(this.jwt) as IJwtDecoded
-    this.client.setJWT(this.jwt)
-  }
-
-  /**
-   * Retrieves the websocket client
-   */
-  public getWebSocket(): Socket {
-    if (!this.socketClient) {
-      this.socketClient = new Socket(this.jwt, this.jwtDecoded.ownerId)
-    }
-    return this.socketClient
   }
 }
