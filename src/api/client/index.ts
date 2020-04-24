@@ -26,7 +26,7 @@ export class ApiClient {
   public remixTrack: RemixTrackEndpoint
   public user: UserEndpoint
   public vocalTrack: VocalTrackEndpoint
-  protected identity: Partial<IIdentity>
+  public identity: Partial<IIdentity>
   protected client: HttpClient
   private static instance: ApiClient
 
@@ -75,6 +75,7 @@ export class ApiClient {
       throw new Error('Invalid identity provided')
     }
     identity.decodedJwt = jwt.decode(identity.token) as IJwtDecoded
+    identity.isAuthenticated = true
     this.client.setIdentity(identity)
     return this
   }
