@@ -2,6 +2,7 @@ import { ApiResponse, ENDPOINT, IHttpClient, IUserCreate, IUserDashboard, IUserF
 
 export class UserEndpoint {
   public path = `${ENDPOINT.USERS}`
+
   constructor(protected readonly client: IHttpClient) {}
 
   /**
@@ -17,7 +18,7 @@ export class UserEndpoint {
    * Otherwise it will retrieve the user that matches the userId parameter
    * @param userId
    */
-  public get(userId = ''): ApiResponse<IUserPayload> {
+  public read(userId = ''): ApiResponse<IUserPayload> {
     return this.client.get<IUserPayload>(`${this.path}${userId && `/${userId}`}`)
   }
 

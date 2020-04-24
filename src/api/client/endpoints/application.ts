@@ -19,7 +19,7 @@ export class ApplicationEndpoint {
    * If the applicationId is not set, it will return the model based on the ownerId
    * @param applicationId
    */
-  public get(applicationId?: string): ApiResponse<IApplication> {
+  public read(applicationId?: string): ApiResponse<IApplication> {
     if (applicationId) {
       return this.client.get<IApplication>(`${this.path}/${applicationId}`)
     }

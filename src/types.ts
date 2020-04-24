@@ -47,6 +47,8 @@ export type IIdentity = IAppCredentials &
     isAuthenticated: boolean
     token: string
     decodedJwt: IJwtDecoded
+    user: IUserPayload
+    app: IApplication
   }
 
 export interface IPaginator {
@@ -101,8 +103,8 @@ export interface IOwnerIdentity {
 
 export interface IApplication extends IEntity {
   appName: string
-  apiKey: string
-  apiSecret: string
+  apiKey?: string
+  apiSecret?: string
   state: string
   role: string
   permission: number

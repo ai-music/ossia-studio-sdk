@@ -1,5 +1,5 @@
 import env from 'dotenv'
-import { ApiResponse, HOST, IApplication, IApplicationCreate, IIdentity, IJwtDecoded } from '../../types'
+import { ApiResponse, HOST, IApplication, IApplicationCreate, IIdentity, IJwtDecoded, IUserPayload, ROLE } from '../../types'
 import {
   AuthEndpoint,
   ApplicationEndpoint,
@@ -60,27 +60,49 @@ export class ApiClient {
   public async authenticate(identity: Partial<IIdentity>): Promise<ApiClient> {
     const { email, password, apiKey, apiSecret, token } = identity
     if (apiKey && apiSecret) {
-      const {
-        data: { token },
-      } = await this.auth.create({ apiKey, apiSecret })
-      identity.token = token
+      identity.token = await this.fetchToken({ apiKey, apiSecret })
     }
     if (email && password) {
-      const {
-        data: { token },
-      } = await this.auth.create({ email, password })
-      identity.token = token
+      identity.token = await this.fetchToken({ email, password })
     }
     if (!token && !identity.token) {
       throw new Error('Invalid identity provided')
     }
+    // Validate token payload
     identity.decodedJwt = jwt.decode(identity.token) as IJwtDecoded
     if (!identity.decodedJwt) {
       throw new TypeError('Provided token is not valid')
     }
-    identity.isAuthenticated = true
     this.client.setIdentity(identity)
+
+    // fetch the right entity
+    if (identity.decodedJwt.role === ROLE.USER || identity.decodedJwt.role === ROLE.ADMIN) {
+      identity.user = await this.fetchUser()
+    }
+    if (identity.decodedJwt.role === ROLE.APPLICATION) {
+      identity.app = await this.fetchApp()
+    }
+    identity.isAuthenticated = true
+    delete identity.password
+    delete identity.apiSecret
     return this
+  }
+
+  protected async fetchToken(payload: Partial<IIdentity>): Promise<string> {
+    const {
+      data: { token },
+    } = await this.auth.create({ ...payload })
+    return token
+  }
+
+  protected async fetchUser(): Promise<IUserPayload> {
+    const { data: user } = await this.user.read()
+    return user
+  }
+
+  protected async fetchApp(): Promise<IApplication> {
+    const { data: app } = await this.application.read()
+    return app
   }
 
   /**
