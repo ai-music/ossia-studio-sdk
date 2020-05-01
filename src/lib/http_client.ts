@@ -6,7 +6,7 @@ export class HttpClient implements IHttpClient {
   protected api: string = process.env.HOST_API || HOST.API
   protected jwt: string = null
 
-  public setIdentity(identity: Partial<IIdentity>): void {
+  public setToken(identity: Partial<IIdentity>): void {
     this.jwt = identity.token
   }
 

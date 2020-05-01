@@ -68,13 +68,13 @@ export class ApiClient {
     if (!token && !identity.token) {
       throw new Error('Invalid identity provided')
     }
+    this.client.setToken(identity)
+
     // Validate token payload
     identity.decodedJwt = jwt.decode(identity.token) as IJwtDecoded
     if (!identity.decodedJwt) {
       throw new TypeError('Provided token is not valid')
     }
-    this.client.setIdentity(identity)
-
     // fetch the right entity
     if (identity.decodedJwt.role === ROLE.USER || identity.decodedJwt.role === ROLE.ADMIN) {
       identity.user = await this.fetchUser()
@@ -85,6 +85,7 @@ export class ApiClient {
     identity.isAuthenticated = true
     delete identity.password
     delete identity.apiSecret
+    this.identity = identity
     return this
   }
 
