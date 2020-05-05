@@ -20,7 +20,7 @@ export class VocalTrackEndpoint {
    * This method returns the vocalTrack model matching the vocalTrackId param
    * @param vocalTrackId
    */
-  public get(vocalTrackId: string): ApiResponse<IVocalTrack> {
+  public read(vocalTrackId: string): ApiResponse<IVocalTrack> {
     return this.client.get<IVocalTrack>(`${this.path}/${vocalTrackId}`)
   }
 

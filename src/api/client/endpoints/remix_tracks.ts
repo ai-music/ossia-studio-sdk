@@ -21,7 +21,7 @@ export class RemixTrackEndpoint {
    * This method returns the remixTrack model
    * @param remixTrackId
    */
-  public get(remixTrackId: string): ApiResponse<IRemixTrack> {
+  public read(remixTrackId: string): ApiResponse<IRemixTrack> {
     return this.client.get<IRemixTrack>(`${this.path}/${remixTrackId}`)
   }
 

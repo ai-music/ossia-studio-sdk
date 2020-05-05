@@ -17,7 +17,7 @@ export class CampaignEndpoint {
    * This method returns the campaign model
    * @param campaignId
    */
-  public get(campaignId: string): ApiResponse<ICampaign> {
+  public read(campaignId: string): ApiResponse<ICampaign> {
     return this.client.get<ICampaign>(`${this.path}/${campaignId}`)
   }
 
