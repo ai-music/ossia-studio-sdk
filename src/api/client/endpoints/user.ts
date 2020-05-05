@@ -1,4 +1,14 @@
-import { ApiResponse, ENDPOINT, IHttpClient, IUserCreate, IUserDashboard, IUserFavourites, IUserPayload, IUserActivate } from '../../../types'
+import {
+  ApiResponse,
+  ENDPOINT,
+  IHttpClient,
+  IUserCreate,
+  IUserDashboard,
+  IUserFavourites,
+  IUserPayload,
+  IUserActivate,
+  IAdminDashboard,
+} from '../../../types'
 
 export class UserEndpoint {
   public path = `${ENDPOINT.USERS}`
@@ -49,8 +59,8 @@ export class UserEndpoint {
    * This method will retrieve the data for a user's dashboard
    * @param userId
    */
-  public dashboard(userId: string): ApiResponse<IUserDashboard> {
-    return this.client.get<IUserDashboard, string>(`${this.path}/${userId}/${ENDPOINT.DASHBOARD}`)
+  public dashboard(userId: string): ApiResponse<IUserDashboard | IAdminDashboard> {
+    return this.client.get<IUserDashboard | IAdminDashboard, string>(`${this.path}/${userId}/${ENDPOINT.DASHBOARD}`)
   }
 
   /**
