@@ -17,7 +17,7 @@ export class BusinessEndpoint {
    * This method will return the business model
    * @param businessId
    */
-  public get(businessId: string): ApiResponse<IBusiness> {
+  public read(businessId: string): ApiResponse<IBusiness> {
     return this.client.get<IBusiness>(`${this.path}/${businessId}`)
   }
 

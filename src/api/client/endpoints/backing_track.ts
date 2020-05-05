@@ -25,7 +25,7 @@ export class BackingTrackEndpoint {
    * This method will return the backing track model
    * @param backingTrackId
    */
-  public get(backingTrackId?: string): ApiResponse<IBackingTrack> {
+  public read(backingTrackId?: string): ApiResponse<IBackingTrack> {
     return this.client.get<IBackingTrack>(`${this.path}/${backingTrackId}`)
   }
 
