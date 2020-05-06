@@ -695,6 +695,53 @@ export interface IUserDashboard {
   recentCampaigns: ICampaign[]
 }
 
+interface IGenericDashboard {
+  total: number
+  pending: number
+}
+
+export interface ITracksDashboard extends IGenericDashboard {
+  ready: number
+  error: number
+  deleted: number
+}
+
+export interface ICampaignsDashboard extends Omit<IGenericDashboard, 'pending'> {
+  active: number
+  deleted: number
+  masters: {
+    pending: number
+    ready: number
+    error: number
+    processing: number
+  }
+}
+
+export interface IUsersDashboard extends IGenericDashboard {
+  active: number
+  suspended: number
+}
+
+export interface IBusinessesDashboard extends Omit<IGenericDashboard, 'pending'> {
+  businessTypes: number
+  individualTypes: number
+}
+
+export interface IAdminDashboard {
+  applications: IApplicationsDashboard
+  businesses: IBusinessesDashboard
+  campaigns: ICampaignsDashboard
+  backingTracks: ITracksDashboard
+  remixTracks: ITracksDashboard
+  vocalTracks: ITracksDashboard
+  users: IUsersDashboard
+}
+
+export interface IApplicationsDashboard extends Omit<IGenericDashboard, 'pending'> {
+  active: number
+  disabled: number
+}
+
 export interface IUserFavourites {
   favourite: string
 }
