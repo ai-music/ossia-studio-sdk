@@ -35,8 +35,8 @@ export class UserEndpoint {
   /**
    * This method will retrieve a collection of users
    */
-  public list(): ApiResponse<IUserPayload> {
-    return this.client.get<IUserPayload>(`${this.path}`)
+  public list(): ApiResponse<IUserPayload[]> {
+    return this.client.get<IUserPayload[]>(`${this.path}`)
   }
 
   /**
