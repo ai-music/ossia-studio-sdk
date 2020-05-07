@@ -80,6 +80,7 @@ export type ApiResponse<T> = Promise<IApiResponse<T>>
 export interface IApiResponse<T> {
   data: T
   isValid: boolean
+  paginator?: IPaginator
 }
 
 export interface IAuthResponse {
