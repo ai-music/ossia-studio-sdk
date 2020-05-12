@@ -8,7 +8,9 @@ import {
   IUserPayload,
   IUserActivate,
   IAdminDashboard,
+  IQueryParameters,
 } from '../../../types'
+import { stringifyQueryObject } from '../../../utils'
 
 export class UserEndpoint {
   public path = `${ENDPOINT.USERS}`
@@ -33,9 +35,16 @@ export class UserEndpoint {
   }
 
   /**
-   * This method will retrieve a collection of users
+   * This method will return the users list
+   * Please bear in mind that this method requires specific permission in order to receive the data
+   * @param parameters
+   * example { paginator: { from: 0, size: 3 } }
    */
-  public list(): ApiResponse<IUserPayload[]> {
+  public list(parameters?: IQueryParameters): ApiResponse<IUserPayload[]> {
+    if (parameters) {
+      const queryParameters = stringifyQueryObject(parameters)
+      return this.client.get<IUserPayload[]>(`${this.path}?${queryParameters}`)
+    }
     return this.client.get<IUserPayload[]>(`${this.path}`)
   }
 
