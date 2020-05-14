@@ -710,12 +710,12 @@ export interface ITracksDashboard extends IGenericDashboard {
 export interface ICampaignsDashboard extends Omit<IGenericDashboard, 'pending'> {
   active: number
   deleted: number
-  masters: {
-    pending: number
-    ready: number
-    error: number
-    processing: number
-  }
+}
+
+export interface IMastersDashboard extends IGenericDashboard {
+  ready: number
+  error: number
+  processing: number
 }
 
 export interface IUsersDashboard extends IGenericDashboard {
@@ -732,6 +732,7 @@ export interface IAdminDashboard {
   applications: IApplicationsDashboard
   businesses: IBusinessesDashboard
   campaigns: ICampaignsDashboard
+  masters: IMastersDashboard
   backingTracks: ITracksDashboard
   remixTracks: ITracksDashboard
   vocalTracks: ITracksDashboard
