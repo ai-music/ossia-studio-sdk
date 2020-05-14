@@ -59,6 +59,7 @@ export class UserEndpoint {
   /**
    * This method will activate the user matching the userId
    * @param payload
+   * @param userId
    */
   public activate(payload: IUserActivate, userId: string): ApiResponse<IUserPayload> {
     return this.client.patch<IUserActivate, IUserPayload>(`${this.path}/${userId}/${ENDPOINT.ACTIVATE}`, payload)
