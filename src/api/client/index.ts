@@ -77,7 +77,7 @@ export class ApiClient {
     }
     // fetch the right entity
     if (identity.decodedJwt.role === ROLE.USER || identity.decodedJwt.role === ROLE.ADMIN) {
-      identity.user = await this.fetchUser()
+      identity.user = await this.fetchUser(identity.decodedJwt.ownerId)
     }
     if (identity.decodedJwt.role === ROLE.APPLICATION) {
       identity.app = await this.fetchApp()
@@ -96,8 +96,8 @@ export class ApiClient {
     return token
   }
 
-  protected async fetchUser(): Promise<IUserPayload> {
-    const { data: user } = await this.user.read()
+  protected async fetchUser(userId: string): Promise<IUserPayload> {
+    const { data: user } = await this.user.read(userId)
     return user
   }
 
