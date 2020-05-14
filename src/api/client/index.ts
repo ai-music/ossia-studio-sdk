@@ -58,12 +58,12 @@ export class ApiClient {
    * This method will authenticate the client(user or application) and store the JTW token
    */
   public async authenticate(identity: Partial<IIdentity>): Promise<ApiClient> {
-    const { email, password, apiKey, apiSecret, token } = identity
+    const { email, password, apiKey, apiSecret, token, role } = identity
     if (apiKey && apiSecret) {
       identity.token = await this.fetchToken({ apiKey, apiSecret })
     }
     if (email && password) {
-      identity.token = await this.fetchToken({ email, password })
+      identity.token = await this.fetchToken({ email, password, role })
     }
     if (!token && !identity.token) {
       throw new Error('Invalid identity provided')
