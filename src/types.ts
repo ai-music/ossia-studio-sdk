@@ -409,6 +409,7 @@ export enum STATE {
   SUSPENDED = 'SUSPENDED',
   DISABLED = 'DISABLED',
   PROCESSING = 'PROCESSING',
+  VERIFIED = 'VERIFIED',
 }
 
 export interface ICampaignCreate {
