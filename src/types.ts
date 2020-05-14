@@ -40,6 +40,7 @@ export interface IAppCredentials {
 export interface IUserCredentials {
   email: string
   password: string
+  role?: ROLE
 }
 
 export type IIdentity = IAppCredentials &
