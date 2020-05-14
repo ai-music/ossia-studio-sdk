@@ -513,6 +513,12 @@ export interface IBackingTrackQueryParameters extends IQueryParameters {
   filters?: IBackingTrackFilters
 }
 
+export interface ITrackQueryParameters extends IQueryParameters {
+  filters?: {
+    ids: string[]
+  }
+}
+
 export enum MUSIC_STYLE {
   AMBIENT = 'AMBIENT',
   BLUES = 'BLUES',
