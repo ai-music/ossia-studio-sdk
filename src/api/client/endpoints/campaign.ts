@@ -1,4 +1,4 @@
-import { ENDPOINT, ApiResponse, IHttpClient, ICampaign, ICampaignCreate, IQueryParameters, STATE } from '../../../types'
+import { ENDPOINT, ApiResponse, IHttpClient, ICampaign, ICampaignCreate, STATE, IFiltersQueryParameters } from '../../../types'
 import { stringifyQueryObject } from '../../../utils'
 
 export class CampaignEndpoint {
@@ -26,7 +26,7 @@ export class CampaignEndpoint {
    * @param parameters
    * parameter for pagination, etc. (e.g. { paginator: { from: 0, size 15 } })
    */
-  public list(parameters?: IQueryParameters): ApiResponse<ICampaign[]> {
+  public list(parameters?: IFiltersQueryParameters): ApiResponse<ICampaign[]> {
     if (parameters) {
       const queryParameters = stringifyQueryObject(parameters)
       return this.client.get<ICampaign[]>(`${this.path}?${queryParameters}`)

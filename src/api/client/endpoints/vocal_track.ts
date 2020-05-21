@@ -1,4 +1,4 @@
-import { ENDPOINT, ApiResponse, IHttpClient, IVocalTrack, IVocalTrackCreate, TAudioFile, ITrackQueryParameters } from '../../../types'
+import { ENDPOINT, ApiResponse, IHttpClient, IVocalTrack, IVocalTrackCreate, TAudioFile, IFiltersQueryParameters } from '../../../types'
 import { stringifyQueryObject, uploadFileWithAwsPolicy } from '../../../utils'
 
 export class VocalTrackEndpoint {
@@ -29,7 +29,7 @@ export class VocalTrackEndpoint {
    * @param parameters
    * parameter for pagination, etc. (e.g. { paginator: { from: 0, size 15 } })
    */
-  public list(parameters?: ITrackQueryParameters): ApiResponse<IVocalTrack[]> {
+  public list(parameters?: IFiltersQueryParameters): ApiResponse<IVocalTrack[]> {
     if (parameters) {
       const queryParameters = stringifyQueryObject(parameters)
       return this.client.get<IVocalTrack[]>(`${this.path}?${queryParameters}`)

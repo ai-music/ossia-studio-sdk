@@ -8,7 +8,7 @@ import {
   IUserPayload,
   IUserActivate,
   IAdminDashboard,
-  IQueryParameters,
+  IFiltersQueryParameters,
 } from '../../../types'
 import { stringifyQueryObject } from '../../../utils'
 
@@ -40,7 +40,7 @@ export class UserEndpoint {
    * @param parameters
    * example { paginator: { from: 0, size: 3 } }
    */
-  public list(parameters?: IQueryParameters): ApiResponse<IUserPayload[]> {
+  public list(parameters?: IFiltersQueryParameters): ApiResponse<IUserPayload[]> {
     if (parameters) {
       const queryParameters = stringifyQueryObject(parameters)
       return this.client.get<IUserPayload[]>(`${this.path}?${queryParameters}`)

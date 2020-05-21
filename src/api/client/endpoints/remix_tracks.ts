@@ -1,4 +1,4 @@
-import { ENDPOINT, ApiResponse, IHttpClient, IRemixTrack, IRemixTrackCreate, TAudioFile, ITrackQueryParameters } from '../../../types'
+import { ENDPOINT, ApiResponse, IHttpClient, IRemixTrack, IRemixTrackCreate, TAudioFile, IFiltersQueryParameters } from '../../../types'
 import { stringifyQueryObject, uploadFileWithAwsPolicy } from '../../../utils'
 
 export class RemixTrackEndpoint {
@@ -30,7 +30,7 @@ export class RemixTrackEndpoint {
    * @param parameters
    * parameter for pagination, etc. (e.g. { paginator: { from: 0, size 15 } })
    */
-  public list(parameters?: ITrackQueryParameters): ApiResponse<IRemixTrack[]> {
+  public list(parameters?: IFiltersQueryParameters): ApiResponse<IRemixTrack[]> {
     if (parameters) {
       const queryParameters = stringifyQueryObject(parameters)
       return this.client.get<IRemixTrack[]>(`${this.path}?${queryParameters}`)
