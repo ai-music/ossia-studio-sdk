@@ -1,4 +1,13 @@
-import { ENDPOINT, IHttpClient, ApiResponse, IBackingTrackCreate, IBackingTrack, IBackingTrackQueryParameters, TAudioFile } from '../../../types'
+import {
+  ENDPOINT,
+  IHttpClient,
+  ApiResponse,
+  IBackingTrackCreate,
+  IBackingTrack,
+  IBackingTrackQueryParameters,
+  TAudioFile,
+  IAwsUploadPolicy,
+} from '../../../types'
 import { stringifyQueryObject, uploadFileWithAwsPolicy } from '../../../utils'
 
 export class BackingTrackEndpoint {
@@ -14,10 +23,7 @@ export class BackingTrackEndpoint {
   public async create(payload: IBackingTrackCreate, originalTrack: TAudioFile, previewTrack: TAudioFile): ApiResponse<IBackingTrack> {
     const response = this.client.post<IBackingTrackCreate, IBackingTrack>(this.path, payload)
     const { data } = await response
-    await Promise.all([
-      uploadFileWithAwsPolicy(data.uploadPolicy, originalTrack, `backing_tracks/${data.id}/original.wav`),
-      uploadFileWithAwsPolicy(data.uploadPolicy, previewTrack, `backing_tracks/${data.id}/preview.mp3`),
-    ])
+    await this.uploadBackingTrack(data.id, data.uploadPolicy, originalTrack, previewTrack)
     return response
   }
 
@@ -49,5 +55,31 @@ export class BackingTrackEndpoint {
    */
   public update(payload: IBackingTrack): ApiResponse<IBackingTrack> {
     return this.client.put<IBackingTrack>(`${this.path}/${payload.id}`, payload)
+  }
+
+  /**
+   * This method will upload the track
+   * Please bear in mind that this method requires specific permission in order to update the model
+   * @param trackId
+   * @param uploadPolicy
+   * @param originalTrack
+   * @param previewTrack
+   */
+  public async uploadBackingTrack(
+    trackId: string,
+    uploadPolicy: IAwsUploadPolicy,
+    originalTrack?: TAudioFile,
+    previewTrack?: TAudioFile,
+  ): Promise<number | number[]> {
+    if (originalTrack && !previewTrack) {
+      return await uploadFileWithAwsPolicy(uploadPolicy, originalTrack, `backing_tracks/${trackId}/original.wav`)
+    }
+    if (!originalTrack && previewTrack) {
+      return await uploadFileWithAwsPolicy(uploadPolicy, previewTrack, `backing_tracks/${trackId}/original.mp3`)
+    }
+    return await Promise.all([
+      uploadFileWithAwsPolicy(uploadPolicy, originalTrack, `backing_tracks/${trackId}/original.wav`),
+      uploadFileWithAwsPolicy(uploadPolicy, previewTrack, `backing_tracks/${trackId}/preview.mp3`),
+    ])
   }
 }
