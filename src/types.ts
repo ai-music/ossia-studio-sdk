@@ -514,7 +514,7 @@ export interface IBackingTrackQueryParameters extends IQueryParameters {
   filters?: IBackingTrackFilters
 }
 
-export interface ITrackQueryParameters extends IQueryParameters {
+export interface IFiltersQueryParameters extends IQueryParameters {
   filters?: {
     ids: string[]
   }

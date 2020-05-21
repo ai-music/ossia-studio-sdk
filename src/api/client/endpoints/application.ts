@@ -1,4 +1,4 @@
-import { ENDPOINT, IApplication, IApplicationCreate, IHttpClient, IQueryParameters, ApiResponse } from '../../../types'
+import { ENDPOINT, IApplication, IApplicationCreate, IHttpClient, ApiResponse, IFiltersQueryParameters } from '../../../types'
 import { stringifyQueryObject } from '../../../utils'
 
 export class ApplicationEndpoint {
@@ -32,7 +32,7 @@ export class ApplicationEndpoint {
    * @param parameters
    * example { paginator: { from: 0, size: 3 } }
    */
-  public list(parameters?: IQueryParameters): ApiResponse<IApplication[]> {
+  public list(parameters?: IFiltersQueryParameters): ApiResponse<IApplication[]> {
     if (parameters) {
       const queryParameters = stringifyQueryObject(parameters)
       return this.client.get<IApplication[]>(`${this.path}?${queryParameters}`)

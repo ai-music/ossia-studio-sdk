@@ -1,4 +1,4 @@
-import { ApiResponse, ENDPOINT, IBusiness, IBusinessCreate, IHttpClient, IQueryParameters } from '../../../types'
+import { ApiResponse, ENDPOINT, IBusiness, IBusinessCreate, IFiltersQueryParameters, IHttpClient } from '../../../types'
 import { stringifyQueryObject } from '../../../utils'
 
 export class BusinessEndpoint {
@@ -27,7 +27,7 @@ export class BusinessEndpoint {
    * @param parameters
    * example { paginator: { from: 0, size: 3 } }
    */
-  public list(parameters?: IQueryParameters): ApiResponse<IBusiness[]> {
+  public list(parameters?: IFiltersQueryParameters): ApiResponse<IBusiness[]> {
     if (parameters) {
       const queryParameters = stringifyQueryObject(parameters)
       return this.client.get<IBusiness[]>(`${this.path}?${queryParameters}`)
