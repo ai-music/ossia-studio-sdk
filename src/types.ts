@@ -729,6 +729,7 @@ export interface IMastersDashboard extends IGenericDashboard {
 export interface IUsersDashboard extends IGenericDashboard {
   active: number
   suspended: number
+  verified: number
 }
 
 export interface IBusinessesDashboard extends Omit<IGenericDashboard, 'pending'> {
