@@ -9,6 +9,7 @@ import {
   BackingTrackEndpoint,
   RemixTrackEndpoint,
   VocalTrackEndpoint,
+  RemixEngineEndpoint,
 } from './endpoints'
 import { HttpClient } from '../../lib/http_client'
 import { Socket } from './sockets'
@@ -24,6 +25,7 @@ export class ApiClient {
   public business: BusinessEndpoint
   public campaign: CampaignEndpoint
   public remixTrack: RemixTrackEndpoint
+  public remixEngine: RemixEngineEndpoint
   public user: UserEndpoint
   public vocalTrack: VocalTrackEndpoint
   public identity: Partial<IIdentity>
@@ -42,6 +44,7 @@ export class ApiClient {
     this.business = new BusinessEndpoint(this.client)
     this.campaign = new CampaignEndpoint(this.client)
     this.remixTrack = new RemixTrackEndpoint(this.client)
+    this.remixEngine = new RemixEngineEndpoint(this.client)
     this.user = new UserEndpoint(this.client)
     this.vocalTrack = new VocalTrackEndpoint(this.client)
   }

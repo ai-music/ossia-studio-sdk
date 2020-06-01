@@ -21,10 +21,20 @@ export enum ENDPOINT {
   TRACKS = 'tracks',
   USERS = 'users',
   CAMPAIGNS = 'campaigns',
+  REMIX_ENGINE_MASTER = 'remix-engine/master',
   REMIX_ENGINE = 'remix-engine',
   VOCAL_TRACKS = 'vocal-tracks',
   BACKING_TRACKS = 'backing-tracks',
   REMIX_TRACKS = 'remix-tracks',
+}
+
+export interface IMasterCreate {
+  campaignId: string
+}
+
+export interface IMasterResponse {
+  processId: string
+  isValid: boolean
 }
 
 export enum CLIENT_TYPE {
