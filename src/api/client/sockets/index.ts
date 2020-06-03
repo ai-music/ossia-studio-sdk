@@ -16,7 +16,7 @@ import { SocketsError } from '../errors'
  * reconnect_failed, reconnect_error, reconnecting, ping, pong
  */
 export class Socket {
-  protected host: string = process.env.HOST_SOCKETS || HOST.SOCKETS
+  protected host: string = process.env.OSSIA_STUDIO_SDK_SOCKETS_HOST || HOST.SOCKETS
   public client: SocketIOClient.Socket
 
   constructor(protected readonly token: string, protected readonly userId: string) {}
