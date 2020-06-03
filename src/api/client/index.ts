@@ -11,9 +11,9 @@ import {
   VocalTrackEndpoint,
   RemixEngineEndpoint,
 } from './endpoints'
-import { HttpClient } from '../../lib/http_client'
 import { Socket } from './sockets'
 import jwt from 'jsonwebtoken'
+import { HttpClient } from './http'
 
 env.config()
 

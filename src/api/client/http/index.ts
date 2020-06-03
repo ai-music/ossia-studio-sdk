@@ -1,9 +1,9 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { ApiResponse, HOST, HTTP_METHOD, IHttpClient, IIdentity } from '../types'
-import { ApiError } from '../api/client/errors'
+import { ApiResponse, HOST, HTTP_METHOD, IHttpClient, IIdentity } from '../../../types'
+import { ApiError } from '../errors'
 
 export class HttpClient implements IHttpClient {
-  protected api: string = process.env.HOST_API || HOST.API
+  protected api: string = process.env.OSSIA_STUDIO_SDK_API_HOST || HOST.API
   protected jwt: string = null
 
   public setToken(identity: Partial<IIdentity>): void {
