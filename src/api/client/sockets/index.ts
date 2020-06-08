@@ -36,20 +36,20 @@ export class Socket {
 
   public bindVocalTrack(resolver: (data: IVocalTrack) => unknown): void {
     this.isConnected()
-    this.client.on(WEBSOCKET_EVENT.VOCAL_TRACK_READY, (data: IVocalTrack) => resolver(data))
-    this.client.on(WEBSOCKET_EVENT.VOCAL_TRACK_ERROR, (data: IVocalTrack) => resolver(data))
+    this.client.on(WEBSOCKET_EVENT.VOCAL_TRACK_READY, ({ data }: { data: IVocalTrack }) => resolver(data))
+    this.client.on(WEBSOCKET_EVENT.VOCAL_TRACK_ERROR, ({ data }: { data: IVocalTrack }) => resolver(data))
   }
 
   public bindCampaignMaster(resolver: (data: ICampaign) => unknown): void {
     this.isConnected()
-    this.client.on(WEBSOCKET_EVENT.CAMPAIGN_MASTER_ERROR, (data: ICampaign) => resolver(data))
-    this.client.on(WEBSOCKET_EVENT.CAMPAIGN_MASTER_READY, (data: ICampaign) => resolver(data))
+    this.client.on(WEBSOCKET_EVENT.CAMPAIGN_MASTER_ERROR, ({ data }: { data: ICampaign }) => resolver(data))
+    this.client.on(WEBSOCKET_EVENT.CAMPAIGN_MASTER_READY, ({ data }: { data: ICampaign }) => resolver(data))
   }
 
   public bindRemixMaster(resolver: (data: IRemixTrack) => unknown): void {
     this.isConnected()
-    this.client.on(WEBSOCKET_EVENT.REMIX_TRACK_MASTER_ERROR, (data: IRemixTrack) => resolver(data))
-    this.client.on(WEBSOCKET_EVENT.REMIX_TRACK_MASTER_READY, (data: IRemixTrack) => resolver(data))
+    this.client.on(WEBSOCKET_EVENT.REMIX_TRACK_MASTER_ERROR, ({ data }: { data: IRemixTrack }) => resolver(data))
+    this.client.on(WEBSOCKET_EVENT.REMIX_TRACK_MASTER_READY, ({ data }: { data: IRemixTrack }) => resolver(data))
   }
 
   protected isConnected(): boolean {
