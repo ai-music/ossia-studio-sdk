@@ -476,6 +476,7 @@ export interface IVocalTrack extends IEntity, IOwnerIdentity {
   state: STATE.PENDING | STATE.READY | STATE.ERROR | STATE.UPLOADED | STATE.DELETED
   storage?: Partial<IGenericTrackStorage>
   uploadPolicy?: IAwsUploadPolicy
+  error?: string
 }
 
 export type IImmutableVocalTrackCreateFields = IImmutableFields | IImmutableTrackFields | 'state' | 'score'
