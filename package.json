@@ -1,7 +1,6 @@
 {
   "name": "@ai-music/ossia-studio-sdk",
   "version": "1.0.0",
-  "main": "dist/api/client/index.js",
   "author": "AIMUSIC",
   "license": "MIT",
   "private": false,
@@ -9,8 +8,10 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist/**/*"
+    "dist"
   ],
   "devDependencies": {
     "@types/jest": "^25.1.4",

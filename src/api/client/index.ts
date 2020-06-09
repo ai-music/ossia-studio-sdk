@@ -1,5 +1,5 @@
 import env from 'dotenv'
-import { ApiResponse, HOST, IApplication, IApplicationCreate, IIdentity, IJwtDecoded, IUserPayload, ROLE } from '../../types'
+import { HOST, IApplication, IIdentity, IJwtDecoded, IUserPayload, ROLE } from '../../types'
 import {
   AuthEndpoint,
   ApplicationEndpoint,
@@ -119,15 +119,5 @@ export class ApiClient {
       return this.socketClient
     }
     return this.socketClient
-  }
-
-  /**
-   * This method allows you to create an application.
-   * Bear in mind that every application needs to be accepted and activated before it can be used.
-   * @param payload
-   */
-  static createApp(payload: IApplicationCreate): ApiResponse<Partial<IApplication>> {
-    const application: ApplicationEndpoint = new ApplicationEndpoint(new HttpClient())
-    return application.create(payload)
   }
 }
