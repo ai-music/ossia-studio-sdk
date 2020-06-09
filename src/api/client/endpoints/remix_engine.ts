@@ -20,10 +20,10 @@ export class RemixEngineEndpoint {
   }
 
   /**
-   * This method allows you to create a remix
+   * This method allows you to create a remix preview
    * @param payload
    */
-  public createRemix(payload: IRemixEnginePreviewCreate): ApiResponse<IRemixEnginePreviewResponse[]> {
-    return this.client.post<IRemixEnginePreviewCreate, IRemixEnginePreviewResponse[]>(ENDPOINT.REMIX_ENGINE_PREVIEW, payload)
+  public createPreview(payload: IRemixEnginePreviewCreate): ApiResponse<IRemixEnginePreviewResponse> {
+    return this.client.post<IRemixEnginePreviewCreate, IRemixEnginePreviewResponse>(ENDPOINT.REMIX_ENGINE_PREVIEW, payload)
   }
 }
