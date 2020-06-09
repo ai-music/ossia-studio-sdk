@@ -22,19 +22,32 @@ export enum ENDPOINT {
   USERS = 'users',
   CAMPAIGNS = 'campaigns',
   REMIX_ENGINE_MASTER = 'remix-engine/master',
+  REMIX_ENGINE_PREVIEW = 'remix-engine/preview',
   REMIX_ENGINE = 'remix-engine',
   VOCAL_TRACKS = 'vocal-tracks',
   BACKING_TRACKS = 'backing-tracks',
   REMIX_TRACKS = 'remix-tracks',
 }
 
-export interface IMasterCreate {
+interface IRemixEngineResponse {
+  processId: string
+  isValid: boolean
+}
+
+export interface IRemixEngineMasterCreate {
   campaignId: string
 }
 
-export interface IMasterResponse {
-  processId: string
-  isValid: boolean
+export interface IRemixEngineMasterResponse extends IRemixEngineResponse {}
+
+export interface IRemixEnginePreviewCreate {
+  backingTrackId: string
+  length: number
+}
+
+export interface IRemixEnginePreviewResponse extends IRemixEngineResponse {
+  tracks: { uri: string }[]
+  markers: unknown[]
 }
 
 export enum CLIENT_TYPE {
