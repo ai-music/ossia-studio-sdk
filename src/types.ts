@@ -50,11 +50,6 @@ export interface IRemixEnginePreviewResponse extends IRemixEngineResponse {
   markers: unknown[]
 }
 
-export enum CLIENT_TYPE {
-  APP = 'APP',
-  USER = 'USER',
-}
-
 export interface IAppCredentials {
   apiKey: string
   apiSecret: string
