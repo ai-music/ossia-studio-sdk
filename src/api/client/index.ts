@@ -89,7 +89,24 @@ export class ApiClient {
     delete identity.password
     delete identity.apiSecret
     this.identity = identity
+    this.refreshTokenInHours(23)
     return this
+  }
+
+  protected async refreshToken(token: string): Promise<void> {
+    const { data: refreshTokenResponse } = await this.auth.refreshToken({ token })
+    this.identity.token = refreshTokenResponse.token
+    this.client.setToken(this.identity)
+  }
+
+  protected refreshTokenInHours(hours: number): void {
+    const timeMs = hours * 3_600_000
+    const timer = setTimeout(() => {
+      this.refreshToken(this.identity.token)
+        .then(() => this.refreshTokenInHours(hours))
+        .catch(error => console.log('Error refreshing token', error))
+        .finally(() => clearTimeout(timer))
+    }, timeMs)
   }
 
   protected async fetchToken(payload: Partial<IIdentity>): Promise<string> {

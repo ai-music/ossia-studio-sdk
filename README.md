@@ -2,8 +2,8 @@
 
 # Ossia Studio SDK
 
-Services and APIs for ossia studio
+Services and APIs for Ossia Studio
 
 ## Development
 
-Please create `HOST_API` variable in you `.env` file that points to your container like `HOST_API="http://localhost:8081"`
+Please create `OSSIA_STUDIO_SDK_API_HOST` variable in you `.env` file that points to your container like `OSSIA_STUDIO_SDK_API_HOST="http://localhost:8081"`

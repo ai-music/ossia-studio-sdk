@@ -14,4 +14,12 @@ export class AuthEndpoint implements IAuthEndpoint {
   public create(payload: Partial<IIdentity>): ApiResponse<IAuthResponse> {
     return this.client.post<Partial<IIdentity>, IAuthResponse>(this.path, payload)
   }
+
+  /**
+   * This method allows you to refresh your token
+   * @param payload
+   */
+  public refreshToken(payload: { token: string }): ApiResponse<{ token: string }> {
+    return this.client.post<{ token: string }, { token: string }>(ENDPOINT.AUTH_REFRESH_TOKEN, payload)
+  }
 }
