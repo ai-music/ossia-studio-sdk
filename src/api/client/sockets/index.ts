@@ -1,6 +1,5 @@
 import ClientIO from 'socket.io-client'
 import { HOST, ICampaign, IRemixTrack, IVocalTrack, WEBSOCKET_EVENT } from '../../../types'
-import { SocketsError } from '../errors'
 
 /**
  * Socket client
@@ -27,11 +26,11 @@ export class Socket {
         token: this.token,
         userId: this.userId,
       },
+      reconnectionDelay: 6000,
+      reconnectionDelayMax: 6000,
+      reconnectionAttempts: 15,
     }
     this.client = ClientIO(`${this.host}`, options).connect()
-    this.client.on(WEBSOCKET_EVENT.CONNECT_ERROR, () => {
-      throw SocketsError.connectionError(`${WEBSOCKET_EVENT.CONNECT_ERROR} event - The client was not able to connect`)
-    })
   }
 
   public bindVocalTrack(resolver: (data: IVocalTrack) => unknown): void {

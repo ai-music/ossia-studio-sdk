@@ -451,6 +451,9 @@ export interface ICampaign extends IEntity, IOwnerIdentity {
 export enum WEBSOCKET_EVENT {
   CONNECT = 'connect',
   CONNECT_ERROR = 'connect_error',
+  RECONNECT = 'reconnect',
+  RECONNECT_ATTEMPT = 'reconnect_attempt',
+  RECONNECT_ERROR = 'reconnect_error',
   VOCAL_TRACK_READY = 'VOCAL_TRACK_READY',
   VOCAL_TRACK_ERROR = 'VOCAL_TRACK_ERROR',
   REMIX_TRACK_MASTER_READY = 'REMIX_TRACK_MASTER_READY',
