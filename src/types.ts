@@ -15,6 +15,7 @@ export enum ENDPOINT {
   FAVOURITES = 'favourites',
   DASHBOARD = 'dashboard',
   AUTH = 'auth',
+  AUTH_REFRESH_TOKEN = 'auth/refresh-token',
   ACTIVATE = 'activate',
   APPLICATIONS = 'applications',
   BUSINESSES = 'businesses',
