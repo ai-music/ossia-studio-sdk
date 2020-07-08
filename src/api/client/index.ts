@@ -31,6 +31,7 @@ export class ApiClient {
   public identity: Partial<IIdentity>
   protected client: HttpClient
   private static instance: ApiClient
+  private refreshTokenTimer: NodeJS.Timeout | null
 
   protected constructor(identity: Partial<IIdentity>, public readonly host = HOST.API) {
     if (!identity) {
@@ -47,6 +48,7 @@ export class ApiClient {
     this.remixEngine = new RemixEngineEndpoint(this.client)
     this.user = new UserEndpoint(this.client)
     this.vocalTrack = new VocalTrackEndpoint(this.client)
+    this.refreshTokenTimer = null
   }
 
   public static async getInstance(identity?: Partial<IIdentity>): Promise<ApiClient> {
@@ -100,12 +102,16 @@ export class ApiClient {
   }
 
   protected refreshTokenInHours(hours: number): void {
+    if (this.refreshTokenTimer) {
+      clearTimeout(this.refreshTokenTimer)
+      this.refreshTokenTimer = null
+    }
+
     const timeMs = hours * 3_600_000
-    const timer = setTimeout(() => {
+    this.refreshTokenTimer = setTimeout(() => {
       this.refreshToken(this.identity.token)
         .then(() => this.refreshTokenInHours(hours))
         .catch(error => console.log('Error refreshing token', error))
-        .finally(() => clearTimeout(timer))
     }, timeMs)
   }
 
