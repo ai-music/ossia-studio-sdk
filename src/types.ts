@@ -531,6 +531,7 @@ export interface IBackingTrackFilters {
   clipId?: string
   ids?: string[]
   state?: STATE
+  isAdmin?: boolean
 }
 
 export interface IBackingTrackQueryParameters extends IQueryParameters {
